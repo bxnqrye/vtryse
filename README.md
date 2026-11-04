@@ -1,4 +1,4 @@
-STILL WORKING ON IT.
+Currently under development.
 
 ## Live Demo
 https://vtryse.vercel.app
