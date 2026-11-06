@@ -92,7 +92,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
         </div>
         <div className="mb-4 md:hidden h-12" />
 
-        {/* Profile picture + name + username */}
+        {/* Pfp + name + username */}
         <div className="glass-soft flex items-center gap-3.5 p-4.5 mb-6">
           {avatarUrl ? (
             <img
