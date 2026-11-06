@@ -99,7 +99,7 @@ function Notifications() {
 
   return (
     <div className="flex-1 overflow-y-auto min-h-0">
-      <p className="g-label px-1 mb-2">Reminders</p>
+      <p className="g-label text-xs hover:bg-(g--hover) rounded font-semibold text-center bg-[#6d5758]/20 px-1 mb-2">R E M I N D E R S</p>
 
       {visibleReminders.length === 0 ? (
         <p className="text-xs t-muted px-1">Nothing due soon</p>

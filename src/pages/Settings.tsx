@@ -264,7 +264,7 @@ function Settings() {
     }
   };
 
-  const card = "glass p-5";
+  const card = "glass p-5 transition-colors hover:shadow-[0_0_24px_rgba(109,87,88,0.5)] hover:bg-trace/20 hover:border-trace";
   const okText = "text-green-700 dark:text-green-400";
   const errText = "text-red-600 dark:text-red-400";
 

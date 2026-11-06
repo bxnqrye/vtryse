@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Notifications from "./Notifications";
 
-function Sidebar() {
+function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +42,17 @@ function Sidebar() {
 
   return (
     <>
+      {/* Desktop show button (only when collapsed) */}
+      {collapsed && (
+        <button
+          onClick={onToggle}
+          className="hidden md:flex fixed top-3 left-3 z-50 glass rounded-xl w-10 h-10 items-center justify-center t-main text-xl"
+          title="Show sidebar"
+        >
+          ☰
+        </button>
+      )}
+
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-3 left-3 right-3 h-13 glass rounded-2xl flex items-center justify-between px-4 z-[60]">
         <h1 className="text-lg font-bold tracking-wide t-main">vtryse</h1>
@@ -63,17 +74,26 @@ function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`w-56 fixed left-3 top-3 bottom-3 z-50 glass rounded-2xl flex flex-col p-4 transition-transform duration-200
-        ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} md:translate-x-0`}
+        className={`w-56 fixed left-3 top-3 bottom-3 z-50 glass rounded-2xl flex flex-col p-4 transition-transform duration-200 bg-[#6d5758]/20
+        ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} ${collapsed ? "md:-translate-x-[120%]" : "md:translate-x-0"}`}
       >
+        {/* Desktop hide button */}
+        <button
+          onClick={onToggle}
+          className="hidden md:flex absolute top-3 right-3 t-muted hover:t-main text-lg leading-none"
+          title="Hide sidebar"
+        >
+          ‹
+        </button>
+
         <div className="mb-6 px-2 hidden md:block">
-          <h1 className="text-2xl font-bold tracking-wide t-main">vtryse</h1>
-          <p className="text-[11px] t-accent tracking-wide">Trace Your Progress</p>
+          <h1 className="text-2xl text-trace font-bold tracking-wide">vtryse</h1>
+          <p className="text-[11px] t-accent font-bold tracking-wide">Trace Your Progress</p>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
         {/* Profile picture + name + username */}
-        <div className="glass-soft flex items-center gap-2.5 p-2.5 mb-5">
+        <div className="glass-soft flex items-center gap-3.5 p-4.5 mb-6">
           {avatarUrl ? (
             <img
               src={avatarUrl}
@@ -95,11 +115,12 @@ function Sidebar() {
           </div>
         </div>
 
-        <nav className="flex flex-col gap-1 mb-6">
+        <nav className="text-sm flex flex-col gap-1 mb-6 font-bold">
           <Link
             to="/dashboard"
             className={linkClass("/dashboard")}
             onClick={() => setIsOpen(false)}
+            hover={"hover:bg-(--g-trace)"}
           >
             Dashboard
           </Link>
