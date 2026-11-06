@@ -38,22 +38,16 @@ function Sidebar() {
   };
 
   const linkClass = (path: string) =>
-    `block px-4 py-2 rounded-lg text-sm transition-colors ${
-      location.pathname === path
-        ? "bg-white/90 text-trace font-bold"
-        : "text-white hover:bg-surface hover:text-text-primary"
-    }`;
+    `nav-link ${location.pathname === path ? "nav-link-active" : ""}`;
 
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-trace border-b border-border-subtle flex items-center justify-between px-4 z-50">
-        <h1 className="text-lg font-semibold text-white tracking-wide">
-          vtryse
-        </h1>
+      <div className="md:hidden fixed top-3 left-3 right-3 h-13 glass rounded-2xl flex items-center justify-between px-4 z-[60]">
+        <h1 className="text-lg font-bold tracking-wide t-main">vtryse</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-white text-2xl leading-none"
+          className="t-main text-2xl leading-none"
         >
           {isOpen ? "✕" : "☰"}
         </button>
@@ -69,38 +63,34 @@ function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`w-56 h-screen bg-trace border-sidebar-border flex flex-col p-4 fixed left-0 top-0 z-50 transition-transform duration-200
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        className={`w-56 fixed left-3 top-3 bottom-3 z-50 glass rounded-2xl flex flex-col p-4 transition-transform duration-200
+        ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} md:translate-x-0`}
       >
         <div className="mb-6 px-2 hidden md:block">
-          <h1 className="text-2xl font-bold text-primary tracking-wide text-black">
-            vtryse
-          </h1>
-          <p className="text-xs text-primary mb-4">Trace Your Progress</p>
+          <h1 className="text-2xl font-bold tracking-wide t-main">vtryse</h1>
+          <p className="text-[11px] t-accent tracking-wide">Trace Your Progress</p>
         </div>
-        <div className="mb-4 md:hidden h-10" />
+        <div className="mb-4 md:hidden h-12" />
 
         {/* Profile picture + name + username */}
-        <div className="flex items-center gap-2 px-2 mb-6">
+        <div className="glass-soft flex items-center gap-2.5 p-2.5 mb-5">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt="Profile"
-              className="w-9 h-9 rounded-full object-cover border border-border-subtle shrink-0"
+              className="w-9 h-9 rounded-full object-cover border border-white/20 shrink-0"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-black flex items-center justify-center text-text-primary text-xs shrink-0">
+            <div className="w-9 h-9 rounded-full bg-(--g-accent) flex items-center justify-center text-white text-xs font-semibold shrink-0">
               {name ? name.charAt(0).toUpperCase() : "?"}
             </div>
           )}
           <div className="flex flex-col min-w-0">
-            <span className="text-sm font-medium text-text-primary truncate">
+            <span className="text-sm font-semibold t-main truncate">
               {name || "User"}
             </span>
             {username && (
-              <span className="text-xs text-black truncate">
-                {username}
-              </span>
+              <span className="text-xs t-muted truncate">{username}</span>
             )}
           </div>
         </div>
@@ -124,10 +114,7 @@ function Sidebar() {
 
         <Notifications />
 
-        <button
-          onClick={handleLogout}
-          className="text-sm text-center px-4 py-2 rounded-lg text-white hover:bg-black hover:text-white transition-colors"
-        >
+        <button onClick={handleLogout} className="btn btn-ghost mt-3">
           Log Out
         </button>
       </aside>

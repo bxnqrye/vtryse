@@ -99,14 +99,12 @@ function Notifications() {
 
   return (
     <div className="flex-1 overflow-y-auto min-h-0">
-      <p className="text-xs font-bold text-white px-4 mb-2 uppercase tracking-wide">
-        Reminders
-      </p>
+      <p className="g-label px-1 mb-2">Reminders</p>
 
       {visibleReminders.length === 0 ? (
-        <p className="text-xs text-surface px-4">Nothing due soon</p>
+        <p className="text-xs t-muted px-1">Nothing due soon</p>
       ) : (
-        <div className="flex flex-col gap-2 px-2">
+        <div className="flex flex-col gap-2">
           {visibleReminders.map((reminder) => {
             const isExpanded = expandedId === reminder.id
             const titleColor = TYPE_COLORS[reminder.type] || '#8b7cf6'
@@ -116,13 +114,14 @@ function Notifications() {
                 onMouseEnter={() => setExpandedId(reminder.id)}
                 onMouseLeave={() => setExpandedId(null)}
                 onClick={() => toggleExpand(reminder.id)}
-                className="border border-white rounded-lg px-3 py-2 cursor-pointer transition-all duration-300 ease-in-out"
+                className="glass-soft px-3 py-2 cursor-pointer transition-all duration-300 ease-in-out hover:bg-(--g-hover)"
+                style={{ borderLeft: `3px solid ${titleColor}` }}
               >
                 <div className="flex justify-between items-start gap-2">
                   <div className="min-w-0 flex-1">
                     <p
                       className={`text-xs font-bold transition-all duration-300 ${
-                        isExpanded ? 'whitespace-normal wrap-break-words' : 'truncate'
+                        isExpanded ? 'whitespace-normal break-words' : 'truncate'
                       }`}
                       style={{ color: titleColor }}
                     >
@@ -134,12 +133,12 @@ function Notifications() {
                         isExpanded ? 'max-h-64 opacity-100 mt-1' : 'max-h-0 opacity-0'
                       }`}
                     >
-                      <p className="text-[10px] font-bold text-surface">
+                      <p className="text-[10px] font-bold t-muted">
                         {reminder.event_date}
                         {reminder.event_time && ` at ${reminder.event_time}`}
                       </p>
                       {reminder.description && (
-                        <p className="text-[11px] text-white mt-1 whitespace-pre-wrap Wrap-break-words">
+                        <p className="text-[11px] t-main mt-1 whitespace-pre-wrap break-words">
                           {reminder.description}
                         </p>
                       )}
@@ -147,7 +146,7 @@ function Notifications() {
                         <img
                           src={reminder.attachment_url}
                           alt="attachment"
-                          className="max-w-full max-h-32 rounded border border-border-subtle object-contain mt-2"
+                          className="max-w-full max-h-32 rounded-lg border g-divider object-contain mt-2"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none'
                           }}
@@ -156,7 +155,7 @@ function Notifications() {
                     </div>
 
                     {!isExpanded && (
-                      <p className="text-[12px] text-white truncate">
+                      <p className="text-[11px] t-muted truncate">
                         {reminder.event_date}
                         {reminder.event_time && ` at ${reminder.event_time}`}
                       </p>
@@ -167,7 +166,7 @@ function Notifications() {
                       e.stopPropagation()
                       handleDismiss(reminder.id)
                     }}
-                    className="text-text-muted text-xs shrink-0"
+                    className="t-muted hover:t-main text-xs shrink-0"
                   >
                     ✕
                   </button>

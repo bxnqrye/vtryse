@@ -168,42 +168,38 @@ function GoalPlannerSection() {
 
   return (
     <div>
-      <h2 className="text-trace text-xl font-bold mb-3 text-header">GOAL PLANNER</h2>
+      <h2 className="g-label text-sm mb-4">Goal Planner</h2>
 
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="glass-soft p-3 flex flex-col gap-2 mb-5">
         {editingId && (
-          <p className="text-[11px]">Editing - Save to update, or Cancel below</p>
+          <p className="text-[11px] t-muted">Editing - Save to update, or Cancel below</p>
         )}
-        <input
-          type="text"
-          placeholder="Goal title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="bg-void border border-border-subtle p-2 rounded text-text-primary placeholder:text-text-muted text-sm"
-        />
-        <input
-          type="date"
-          value={targetDate}
-          onChange={(e) => setTargetDate(e.target.value)}
-          className="bg-void border border-border-subtle p-2 rounded text-text-primary text-sm"
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <input
+            type="text"
+            placeholder="Goal title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="glass-input"
+          />
+          <input
+            type="date"
+            value={targetDate}
+            onChange={(e) => setTargetDate(e.target.value)}
+            className="glass-input"
+          />
+        </div>
         <div className="flex gap-2">
-          <button
-            onClick={handleAddGoal}
-            className="bg-trace px-4 py-2 rounded-lg hover:bg-surface transition-colors text-sm flex-1"
-          >
+          <button onClick={handleAddGoal} className="btn btn-primary flex-1">
             {editingId ? 'Save Changes' : 'Add Goal'}
           </button>
           {editingId && (
-            <button
-              onClick={resetForm}
-              className="bg-surface text-text-muted px-4 py-2 rounded-lg text-sm"
-            >
+            <button onClick={resetForm} className="btn btn-ghost">
               Cancel
             </button>
           )}
         </div>
-        {errorMsg && <p className="text-[#E02626] text-sm">{errorMsg}</p>}
+        {errorMsg && <p className="text-red-600 dark:text-red-400 text-xs">{errorMsg}</p>}
       </div>
 
       <ul className="space-y-3">
@@ -213,35 +209,31 @@ function GoalPlannerSection() {
           const isOwner = goal.user_id === currentUserId
 
           return (
-            <li key={goal.id} className="bg-void border border-border-subtle p-4 rounded-lg text-lg">
+            <li key={goal.id} className="glass-soft p-4">
               <div className="flex justify-between items-start gap-2">
-                <p className="font-bold text-[#C49D8B]">{goal.title}</p>
+                <p className="font-bold text-base t-accent">{goal.title}</p>
                 {isOwner && (
-                  <div className="flex gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => startEditing(goal)}
-                      className="hover:text-text-muted text-[12px]"
-                    >
+                  <div className="flex gap-1.5 shrink-0">
+                    <button onClick={() => startEditing(goal)} className="btn btn-ghost btn-sm">
                       Edit
                     </button>
-                    <button
-                      onClick={() => setConfirmDeleteId(goal.id)}
-                      className="hover:text-[#e0262665] text-[#E02626] text-[12px]"
-                    >
+                    <button onClick={() => setConfirmDeleteId(goal.id)} className="btn btn-ghost btn-sm !text-(--g-danger)">
                       Delete
                     </button>
                   </div>
                 )}
               </div>
-              <p className="text-[13px] text-text-primary">
+              <p className="text-[13px] mt-1">
                 Target: {goal.target_date} —{' '}
-                {daysLeft >= 0 ? `${daysLeft} days left` : 'Overdue'}
+                <span className={daysLeft >= 0 ? '' : 'text-red-600 dark:text-red-400 font-semibold'}>
+                  {daysLeft >= 0 ? `${daysLeft} days left` : 'Overdue'}
+                </span>
               </p>
-              <p className="text-[12px] text-text-muted">
+              <p className="text-[12px] t-muted">
                 Added by {profileNames[goal.user_id] || 'Someone'}
               </p>
 
-              <div className="mt-2">
+              <div className="mt-3 flex gap-2">
                 <input
                   type="text"
                   placeholder="Add progress note"
@@ -249,18 +241,15 @@ function GoalPlannerSection() {
                   onChange={(e) =>
                     setNoteInputs({ ...noteInputs, [goal.id]: e.target.value })
                   }
-                  className="border border-border-subtle p-1 rounded w-full mb-1 text-text-primary placeholder:text-text-muted text-xs"
+                  className="glass-input"
                 />
-                <button
-                  onClick={() => handleAddUpdate(goal.id)}
-                  className="bg-surface px-3 py-1 rounded text-xs hover:bg-void transition-colors"
-                >
+                <button onClick={() => handleAddUpdate(goal.id)} className="btn btn-ghost btn-sm shrink-0">
                   Log Update
                 </button>
               </div>
 
               {goalUpdates.length > 0 && (
-                <ul className="mt-2 text-[14px] text-text-primary list-disc list-inside">
+                <ul className="mt-3 text-[13px] list-disc list-inside space-y-0.5">
                   {goalUpdates.map((u) => (
                     <li key={u.id}>{u.note}</li>
                   ))}

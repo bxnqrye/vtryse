@@ -264,253 +264,238 @@ function Settings() {
     }
   };
 
-  const sectionLabel =
-    "text-[11px] font-medium text-text-muted uppercase tracking-widest mb-4";
-  const card = "bg-void border border-border-subtle rounded-xl p-5 mb-4";
-  const inputStyle =
-    "border border-border-subtle bg-surface/50 p-2.5 rounded-lg text-text-primary text-sm placeholder:text-text-muted focus:outline-none focus:border-trace transition-colors";
-  const primaryBtn =
-    "bg-trace text-white px-4 py-2 rounded-lg text-sm hover:bg-surface transition-colors";
-  const secondaryBtn =
-    "border border-border-subtle text-text-primary px-4 py-2 rounded-lg text-sm hover:bg-surface-hover transition-colors";
+  const card = "glass p-5";
+  const okText = "text-green-700 dark:text-green-400";
+  const errText = "text-red-600 dark:text-red-400";
 
   return (
-    <div className="p-8 max-w-md">
-      <h1 className="text-xl font-semibold mb-8 text-text-primary">Settings</h1>
+    <div className="p-4 md:p-6 max-w-5xl mx-auto">
+      <header className="mb-5">
+        <p className="g-label mb-1">Preferences</p>
+        <h1 className="text-2xl font-semibold t-main">Settings</h1>
+      </header>
 
-      {/* Account */}
-      <div className={card}>
-        <p className={sectionLabel}>Account</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        {/* Left column */}
+        <div className="flex flex-col gap-4">
+          {/* Account */}
+          <div className={card}>
+            <p className="g-label mb-4">Account</p>
 
-        <div className="flex items-center gap-4 mb-4">
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt="Profile"
-              className="w-16 h-16 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-surface-hover border border-border-subtle flex items-center justify-center text-text-muted text-xs">
-              No photo
-            </div>
-          )}
-          <label className="text-sm text-trace cursor-pointer hover:underline">
-            {uploading ? "Uploading..." : "Change photo"}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarUpload}
-              className="hidden"
-              disabled={uploading}
-            />
-          </label>
-        </div>
-
-        <div className="flex flex-col gap-2 mb-3">
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className={inputStyle}
-          />
-        </div>
-
-        <button onClick={handleSaveAccount} className={primaryBtn}>
-          Save Changes
-        </button>
-
-        {errorMsg && <p className="text-[#E02626] text-xs mt-2">{errorMsg}</p>}
-        {successMsg && (
-          <p className="text-[#DBD7D7] text-xs mt-2">{successMsg}</p>
-        )}
-      </div>
-
-      {/* Privacy */}
-      <div className={card}>
-        <p className={sectionLabel}>Privacy</p>
-
-        <div className="flex flex-col gap-2 mb-3">
-          <input
-            type="password"
-            placeholder="New password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className={inputStyle}
-          />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={inputStyle}
-          />
-        </div>
-
-        <button onClick={handleChangePassword} className={primaryBtn}>
-          Update Password
-        </button>
-
-        {passwordMsg && (
-          <p
-            className={`text-xs mt-2 ${passwordMsg.includes("success") ? "text-green-400" : "text-red-400"}`}
-          >
-            {passwordMsg}
-          </p>
-        )}
-      </div>
-
-      {/* Theme */}
-      <div className={card}>
-        <p className={sectionLabel}>Theme</p>
-        <div className="flex gap-2">
-          {["light", "dark", "system"].map((t) => (
-            <button
-              key={t}
-              onClick={() => handleThemeChange(t)}
-              className={`flex-1 px-3 py-2 rounded-lg text-sm capitalize transition-colors ${
-                theme === t
-                  ? "bg-trace hover:bg-surface hover:text-text-primary"
-                  : "border border-border-subtle text-text-muted hover:bg-surface hover:text-text-primary"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Country & Timezone */}
-      <div className={card}>
-        <p className={sectionLabel}>Country & Timezone</p>
-
-        <div className="flex flex-col gap-2 mb-3">
-          <SearchableSelect
-            options={COUNTRIES.map((c) => ({ value: c.name, label: c.name }))}
-            value={country}
-            onChange={(val) => {
-              setCountry(val);
-              const match = COUNTRIES.find((c) => c.name === val);
-              if (match) setTimezone(match.timezone);
-            }}
-            placeholder="Search country..."
-          />
-          <SearchableSelect
-            options={ALL_TIMEZONES.map((tz) => ({ value: tz, label: tz }))}
-            value={timezone}
-            onChange={setTimezone}
-            placeholder="Search timezone..."
-          />
-        </div>
-
-        <button onClick={handleSaveLocation} className={primaryBtn}>
-          Save
-        </button>
-
-        {locationMsg && (
-          <p
-            className={`text-xs mt-2 ${locationMsg.includes("saved") ? "text-green-400" : "text-red-400"}`}
-          >
-            {locationMsg}
-          </p>
-        )}
-      </div>
-
-      {/* Location Sharing */}
-      <div className={card}>
-        <p className={sectionLabel}>Location Sharing</p>
-        <p className="text-xs text-text-muted mb-3">
-          Show your location, time, and weather to people sharing your
-          dashboard.
-        </p>
-        <button
-          onClick={handleToggleShareLocation}
-          className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-            shareLocation
-              ? "bg-trace text-white hover:bg-surface"
-              : "border border-border-subtle text-text-muted hover:bg-surface"
-          }`}
-        >
-          {shareLocation ? "Sharing Enabled" : "Sharing Disabled"}
-        </button>
-      </div>
-
-      {/* Sharing */}
-      <div className={card}>
-        <p className={sectionLabel}>Sharing</p>
-
-        <div className="flex flex-col gap-3">
-          <div>
-            <button onClick={handleShareWithOthers} className={primaryBtn}>
-              Share with Others
-            </button>
-            {shareCode && (
-              <div className="mt-3 bg-void border border-border-subtle rounded-lg p-3">
-                <p className="text-[11px] text-text-muted mb-1">
-                  Share this code
-                </p>
-                <p className="text-lg font-mono font-semibold text-trace tracking-widest">
-                  {shareCode}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <button
-              onClick={() => setShowAcceptInput(!showAcceptInput)}
-              className={secondaryBtn}
-            >
-              Accept Sharing
-            </button>
-            {showAcceptInput && (
-              <div className="mt-3 flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter code"
-                  value={redeemCode}
-                  onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
-                  maxLength={6}
-                  className={`${inputStyle} flex-1 font-mono tracking-widest`}
+            <div className="flex items-center gap-4 mb-4">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover border border-white/20"
                 />
-                <button onClick={handleAcceptSharing} className={primaryBtn}>
-                  Join
+              ) : (
+                <div className="w-16 h-16 rounded-full glass-soft !rounded-full flex items-center justify-center t-muted text-xs">
+                  No photo
+                </div>
+              )}
+              <label className="btn btn-ghost btn-sm cursor-pointer">
+                {uploading ? "Uploading..." : "Change photo"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+              </label>
+            </div>
+
+            <div className="flex flex-col gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="glass-input"
+              />
+              <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="glass-input"
+              />
+            </div>
+
+            <button onClick={handleSaveAccount} className="btn btn-primary">
+              Save Changes
+            </button>
+
+            {errorMsg && <p className={`${errText} text-xs mt-2`}>{errorMsg}</p>}
+            {successMsg && <p className="t-muted text-xs mt-2">{successMsg}</p>}
+          </div>
+
+          {/* Theme */}
+          <div className={card}>
+            <p className="g-label mb-4">Theme</p>
+            <div className="flex gap-2">
+              {["light", "dark", "system"].map((t) => (
+                <button
+                  key={t}
+                  onClick={() => handleThemeChange(t)}
+                  className={`btn flex-1 capitalize ${
+                    theme === t ? "btn-primary" : "btn-ghost"
+                  }`}
+                >
+                  {t}
                 </button>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Country & Timezone */}
+          <div className={card}>
+            <p className="g-label mb-4">Country &amp; Timezone</p>
+
+            <div className="flex flex-col gap-2 mb-4">
+              <SearchableSelect
+                options={COUNTRIES.map((c) => ({ value: c.name, label: c.name }))}
+                value={country}
+                onChange={(val) => {
+                  setCountry(val);
+                  const match = COUNTRIES.find((c) => c.name === val);
+                  if (match) setTimezone(match.timezone);
+                }}
+                placeholder="Search country..."
+              />
+              <SearchableSelect
+                options={ALL_TIMEZONES.map((tz) => ({ value: tz, label: tz }))}
+                value={timezone}
+                onChange={setTimezone}
+                placeholder="Search timezone..."
+              />
+            </div>
+
+            <button onClick={handleSaveLocation} className="btn btn-primary">
+              Save
+            </button>
+
+            {locationMsg && (
+              <p className={`text-xs mt-2 ${locationMsg.includes("saved") ? okText : errText}`}>
+                {locationMsg}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="flex flex-col gap-4">
+          {/* Privacy */}
+          <div className={card}>
+            <p className="g-label mb-4">Privacy</p>
+
+            <div className="flex flex-col gap-2 mb-4">
+              <input
+                type="password"
+                placeholder="New password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="glass-input"
+              />
+              <input
+                type="password"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="glass-input"
+              />
+            </div>
+
+            <button onClick={handleChangePassword} className="btn btn-primary">
+              Update Password
+            </button>
+
+            {passwordMsg && (
+              <p className={`text-xs mt-2 ${passwordMsg.includes("success") ? okText : errText}`}>
+                {passwordMsg}
+              </p>
             )}
           </div>
 
-          {shareMsg && (
-            <p
-              className={`text-xs ${shareMsg.includes("Success") ? "text-green-400" : "text-red-400"}`}
-            >
-              {shareMsg}
+          {/* Location Sharing */}
+          <div className={card}>
+            <p className="g-label mb-3">Location Sharing</p>
+            <p className="text-xs t-muted mb-4 leading-relaxed">
+              Show your location, time, and weather to people sharing your dashboard.
             </p>
-          )}
-        </div>
-      </div>
+            <button
+              onClick={handleToggleShareLocation}
+              className={`btn ${shareLocation ? "btn-primary" : "btn-ghost"}`}
+            >
+              {shareLocation ? "Sharing Enabled" : "Sharing Disabled"}
+            </button>
+          </div>
 
-      {/* Danger Zone */}
-      <div className="border border-red-900/40 rounded-xl p-5">
-        <p className="text-[11px] font-medium text-red-400 uppercase tracking-widest mb-2">
-          Danger Zone
-        </p>
-        <p className="text-xs text-text-muted mb-4">
-          This action is permanent and cannot be undone.
-        </p>
-        <button
-          onClick={handleDeleteAccount}
-          className="bg-red-900/80 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-800 transition-colors"
-        >
-          Delete Account
-        </button>
+          {/* Sharing */}
+          <div className={card}>
+            <p className="g-label mb-4">Sharing</p>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <button onClick={handleShareWithOthers} className="btn btn-primary">
+                  Share with Others
+                </button>
+                {shareCode && (
+                  <div className="glass-soft mt-3 p-3">
+                    <p className="text-[11px] t-muted mb-1">Share this code</p>
+                    <p className="text-lg font-mono font-semibold t-accent tracking-widest">
+                      {shareCode}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <button
+                  onClick={() => setShowAcceptInput(!showAcceptInput)}
+                  className="btn btn-ghost"
+                >
+                  Accept Sharing
+                </button>
+                {showAcceptInput && (
+                  <div className="mt-3 flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter code"
+                      value={redeemCode}
+                      onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                      maxLength={6}
+                      className="glass-input flex-1 font-mono tracking-widest"
+                    />
+                    <button onClick={handleAcceptSharing} className="btn btn-primary">
+                      Join
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {shareMsg && (
+                <p className={`text-xs ${shareMsg.includes("Success") ? okText : errText}`}>
+                  {shareMsg}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Danger Zone */}
+          <div className={`${card} glass-danger`}>
+            <p className="text-[11px] font-bold text-(--g-danger) uppercase tracking-widest mb-2">
+              Danger Zone
+            </p>
+            <p className="text-xs t-muted mb-4">
+              This action is permanent and cannot be undone.
+            </p>
+            <button onClick={handleDeleteAccount} className="btn btn-danger">
+              Delete Account
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

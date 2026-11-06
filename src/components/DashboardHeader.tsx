@@ -6,7 +6,7 @@ import { formatInTimezone } from '../utils/timezone'
 interface MemberInfo {
   name: string
   country: string | null
-  timezone: string 
+  timezone: string
   weather: string | null
   temp: number | null
 }
@@ -73,25 +73,27 @@ function DashboardHeader() {
     loadMembers()
   }, [now])
 
+  if (members.length === 0) return null
+
   return (
-    <div className="flex flex-wrap gap-2 mb-6">
+    <div className="flex flex-wrap gap-2 mb-4">
       {members.map((m, i) => {
         const { time } = formatInTimezone(now, m.timezone)
         return (
           <div
             key={i}
-            className="bg-surface border border-border-subtle rounded-lg px-3 py-1.5 text-xs text-text-primary flex items-center gap-1.5"
+            className="glass-soft !rounded-full px-3.5 py-1.5 text-xs flex items-center gap-1.5"
           >
-            <span>{m.country}</span>
-            <span className="text-text-muted">·</span>
+            <span className="font-semibold">{m.country}</span>
+            <span className="t-muted">·</span>
             <span>{time}</span>
             {m.weather && (
               <>
-                <span className="text-text-muted">·</span>
+                <span className="t-muted">·</span>
                 <span>{m.weather}{m.temp !== null ? ` ${Math.round(m.temp)}°C` : ''}</span>
               </>
             )}
-            <span className="text-text-muted">({m.name})</span>
+            <span className="t-muted">({m.name})</span>
           </div>
         )
       })}

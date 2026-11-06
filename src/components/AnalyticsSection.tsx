@@ -24,8 +24,8 @@ interface Goal {
 
 const STATUS_COLORS: Record<string, string> = {
   ongoing: '#C49D8B',
-  completed: '#193B20',
-  cancelled: '#690000',
+  completed: '#3f8a52',
+  cancelled: '#a33a3a',
 }
 
 const TYPE_COLORS: Record<string, string> = {
@@ -35,11 +35,19 @@ const TYPE_COLORS: Record<string, string> = {
   note: '#E8899A',
 }
 
+const tooltipStyle = {
+  background: 'var(--g-glass-strong)',
+  border: '1px solid var(--g-border)',
+  borderRadius: 12,
+  color: 'var(--g-text)',
+  fontSize: 12,
+}
+
 function JournalTooltip({ active, payload }: any) {
   if (!active || !payload || !payload.length) return null
   const point = payload[0].payload
   return (
-    <div className="bg-surface border border-border-subtle rounded px-2 py-1 text-xs text-text-primary">
+    <div className="g-modal glass !rounded-lg px-2.5 py-1.5 text-xs">
       {point.date} : {point.title}
     </div>
   )
@@ -129,168 +137,179 @@ function AnalyticsSection() {
 
   return (
     <div>
-      <h2 className="text-trace text-xl font-bold mb-3 text-header">
-        ANALYTICS
-      </h2>
+      <h2 className="g-label text-sm mb-4">Analytics</h2>
 
-      <div className="flex justify-end gap-2 mb-3">
-        <button
-          onClick={() => setChartType('bar')}
-          className={`px-3 py-1 rounded text-xs ${chartType === 'bar' ? 'bg-trace text-white' : 'bg-void text-text-muted'}`}
-        >
-          Bar
-        </button>
-        <button
-          onClick={() => setChartType('pie')}
-          className={`px-3 py-1 rounded text-xs ${chartType === 'pie' ? 'bg-trace text-white' : 'bg-void text-text-muted'}`}
-        >
-          Pie
-        </button>
-      </div>
-
-      <div className="h-64 mb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          {chartType === 'bar' ? (
-            <BarChart data={statusCounts}>
-              <XAxis dataKey="status" stroke="#8b8a99" fontSize={12} />
-              <YAxis stroke="#8b8a99" fontSize={12} allowDecimals={false} />
-              <Tooltip />
-              <Bar
-                dataKey="count"
-                cursor="pointer"
-                onClick={(data: any) => setSelectedStatus(data.status)}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Status chart */}
+        <div className="min-w-0">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-semibold">Status</p>
+            <div className="flex gap-1.5">
+              <button
+                onClick={() => setChartType('bar')}
+                className={`btn btn-sm ${chartType === 'bar' ? 'btn-primary' : 'btn-ghost'}`}
               >
-                {statusCounts.map((entry) => (
-                  <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
-                ))}
-              </Bar>
-            </BarChart>
-          ) : (
-            <PieChart>
-              <Pie
-                data={statusCounts}
-                dataKey="count"
-                nameKey="status"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                label
-                onClick={(data: any) => setSelectedStatus(data.status)}
-                cursor="pointer"
+                Bar
+              </button>
+              <button
+                onClick={() => setChartType('pie')}
+                className={`btn btn-sm ${chartType === 'pie' ? 'btn-primary' : 'btn-ghost'}`}
               >
-                {statusCounts.map((entry) => (
-                  <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          )}
-        </ResponsiveContainer>
-      </div>
-
-      {selectedStatus && (
-        <div className="mb-4 bg-void border border-border-subtle rounded-lg p-3">
-          <div className="flex justify-between items-center mb-1">
-            <p className="text-sm font-medium text-text-primary capitalize">
-              {selectedStatus} items
-            </p>
-            <button onClick={() => setSelectedStatus(null)} className="text-text-muted text-[12px]">
-              ✕
-            </button>
+                Pie
+              </button>
+            </div>
           </div>
-          {revealedTitles.length === 0 ? (
-            <p className="text-xs text-text-muted">No items</p>
-          ) : (
-            <ul className="text-xs text-text-muted list-disc list-inside">
-              {revealedTitles.map((t, i) => (
-                <li key={i}>{t}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
 
-      <p className="text-[17px] font-medium text-text-primary mb-2">Journal Activity</p>
-      <div className="h-40 mb-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart>
-            <CartesianGrid strokeDasharray="3 3" stroke="#C49D8B" />
-            <XAxis
-              dataKey="x"
-              type="number"
-              domain={['dataMin', 'dataMax']}
-              tickFormatter={(val) =>
-                new Date(val).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
-              }
-              stroke="#8b8a99"
-              fontSize={11}
-            />
-            <YAxis
-              dataKey="y"
-              type="number"
-              domain={[0, maxY + 1]}
-              hide
-            />
-            <Tooltip content={<JournalTooltip />} />
-            <Scatter
-              data={notePoints}
-              cursor="pointer"
-              onClick={(data: any) => {
-                setSelectedNotes([data.raw])
-              }}
-            >
-              {notePoints.map((point, index) => (
-                <Cell key={index} fill={point.color} />
-              ))}
-            </Scatter>
-          </ScatterChart>
-        </ResponsiveContainer>
-      </div>
-
-      {selectedNotes && selectedNotes.length > 0 && (
-        <div className="mb-4 bg-surface border border-border-subtle rounded-lg p-3 space-y-3">
-          <div className="flex justify-between items-center">
-            <p className="text-[11px] text-text-muted">{selectedNotes[0].event_date}</p>
-            <button onClick={() => setSelectedNotes(null)} className="text-text-muted text-xs">
-              ✕
-            </button>
-          </div>
-          {selectedNotes.map((note) => (
-            <div key={note.id} className="border-t border-border-subtle pt-2 first:border-0 first:pt-0">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TYPE_COLORS[note.type] || note.color }} />
-                <p className="text-sm font-bold text-[#C49D8B]">{note.title}</p>
-              </div>
-              {note.description && (
-                <p className="text-xs text-text-primary text-justify mt-1 whitespace-pre-wrap">{note.description}</p>
+          <div className="h-44">
+            <ResponsiveContainer width="100%" height="100%">
+              {chartType === 'bar' ? (
+                <BarChart data={statusCounts}>
+                  <XAxis dataKey="status" stroke="#8b8a99" fontSize={12} />
+                  <YAxis stroke="#8b8a99" fontSize={12} allowDecimals={false} />
+                  <Tooltip contentStyle={tooltipStyle} itemStyle={{ color: 'var(--g-text)' }} cursor={{ fill: 'rgba(109,87,88,0.15)' }} />
+                  <Bar
+                    dataKey="count"
+                    cursor="pointer"
+                    radius={[6, 6, 0, 0]}
+                    onClick={(data: any) => setSelectedStatus(data.status)}
+                  >
+                    {statusCounts.map((entry) => (
+                      <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              ) : (
+                <PieChart>
+                  <Pie
+                    data={statusCounts}
+                    dataKey="count"
+                    nameKey="status"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={65}
+                    stroke="none"
+                    label={{ fill: '#8b8a99', fontSize: 11 }}
+                    onClick={(data: any) => setSelectedStatus(data.status)}
+                    cursor="pointer"
+                  >
+                    {statusCounts.map((entry) => (
+                      <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
+                    ))}
+                  </Pie>
+                  <Tooltip contentStyle={tooltipStyle} itemStyle={{ color: 'var(--g-text)' }} />
+                </PieChart>
               )}
-              {note.attachment_url && (
-                <img
-                  src={note.attachment_url}
-                  alt="attachment"
-                  className="max-w-full max-h-48 rounded border border-border-subtle object-contain mt-2"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
+            </ResponsiveContainer>
+          </div>
+
+          {selectedStatus && (
+            <div className="glass-soft mt-3 p-3">
+              <div className="flex justify-between items-center mb-1">
+                <p className="text-sm font-medium capitalize">{selectedStatus} items</p>
+                <button onClick={() => setSelectedStatus(null)} className="t-muted hover:t-main text-xs">
+                  ✕
+                </button>
+              </div>
+              {revealedTitles.length === 0 ? (
+                <p className="text-xs t-muted">No items</p>
+              ) : (
+                <ul className="text-xs t-muted list-disc list-inside max-h-28 overflow-y-auto">
+                  {revealedTitles.map((t, i) => (
+                    <li key={i}>{t}</li>
+                  ))}
+                </ul>
               )}
             </div>
-          ))}
+          )}
         </div>
-      )}
 
-      <p className="text-[17px] font-medium text-text-primary mb-2">Goal Deadlines</p>
-      <div className="space-y-1">
-        {goals.length === 0 && <p className="text-xs text-text-muted">No goals yet</p>}
-        {goals.map((goal) => {
-          const days = getDaysRemaining(goal.target_date)
-          return (
-            <p key={goal.id} className="text-[13px] mb-0 text-text-muted">
-              <span className="text-[#C49D8B] font-bold">{goal.title}</span> —{' '}
-              {days >= 0 ? `${days} days remaining` : 'Overdue'}
-            </p>
-          )
-        })}
+        {/* Journal activity */}
+        <div className="min-w-0">
+          <p className="text-sm font-semibold mb-2 lg:h-[30px] flex items-center">Journal Activity</p>
+          <div className="h-44">
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(109,87,88,0.35)" />
+                <XAxis
+                  dataKey="x"
+                  type="number"
+                  domain={['dataMin', 'dataMax']}
+                  tickFormatter={(val) =>
+                    new Date(val).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                  }
+                  stroke="#8b8a99"
+                  fontSize={11}
+                />
+                <YAxis dataKey="y" type="number" domain={[0, maxY + 1]} hide />
+                <Tooltip content={<JournalTooltip />} />
+                <Scatter
+                  data={notePoints}
+                  cursor="pointer"
+                  onClick={(data: any) => {
+                    setSelectedNotes([data.raw])
+                  }}
+                >
+                  {notePoints.map((point, index) => (
+                    <Cell key={index} fill={point.color} />
+                  ))}
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+
+          {selectedNotes && selectedNotes.length > 0 && (
+            <div className="glass-soft mt-3 p-3 space-y-3 max-h-64 overflow-y-auto">
+              <div className="flex justify-between items-center">
+                <p className="text-[11px] t-muted">{selectedNotes[0].event_date}</p>
+                <button onClick={() => setSelectedNotes(null)} className="t-muted hover:t-main text-xs">
+                  ✕
+                </button>
+              </div>
+              {selectedNotes.map((note) => (
+                <div key={note.id} className="border-t g-divider pt-2 first:border-0 first:pt-0">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: TYPE_COLORS[note.type] || note.color }} />
+                    <p className="text-sm font-bold t-accent">{note.title}</p>
+                  </div>
+                  {note.description && (
+                    <p className="text-xs text-justify mt-1 whitespace-pre-wrap">{note.description}</p>
+                  )}
+                  {note.attachment_url && (
+                    <img
+                      src={note.attachment_url}
+                      alt="attachment"
+                      className="max-w-full max-h-48 rounded-lg border g-divider object-contain mt-2"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Goal deadlines */}
+        <div className="min-w-0">
+          <p className="text-sm font-semibold mb-2 lg:h-[30px] flex items-center">Goal Deadlines</p>
+          <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+            {goals.length === 0 && <p className="text-xs t-muted">No goals yet</p>}
+            {goals.map((goal) => {
+              const days = getDaysRemaining(goal.target_date)
+              return (
+                <div key={goal.id} className="glass-soft px-3 py-2 flex items-center justify-between gap-3">
+                  <span className="text-[13px] font-bold t-accent truncate">{goal.title}</span>
+                  <span
+                    className={`text-[11px] shrink-0 ${days >= 0 ? 't-muted' : 'text-red-600 dark:text-red-400 font-semibold'}`}
+                  >
+                    {days >= 0 ? `${days} days remaining` : 'Overdue'}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -26,22 +26,28 @@ function Dashboard() {
   }, [])
 
   return (
-    <div className="p-8">
-      <h1 className="text-xl mb-2 text-text-primary">
-        {name ? `Welcome back, ${name}!` : 'Dashboard'}
-      </h1>
+    <div className="p-4 md:p-6 max-w-[1600px] mx-auto">
+      <header className="mb-4">
+        <p className="g-label mb-1">Dashboard</p>
+        <h1 className="text-2xl font-semibold t-main">
+          {name ? `Welcome back, ${name}!` : 'Dashboard'}
+        </h1>
+      </header>
 
       <DashboardHeader />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-void border border-surface rounded-xl p-5">
+      <div className="flex flex-col gap-4">
+        <section className="glass p-5">
           <AnalyticsSection />
-        </div>
-        <div className="bg-void border border-surface rounded-xl p-5">
-          <CalendarSection />
-        </div>
-        <div className="bg-void border border-surface rounded-xl p-5">
-          <GoalPlannerSection />
+        </section>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
+          <section className="glass p-5">
+            <CalendarSection />
+          </section>
+          <section className="glass p-5">
+            <GoalPlannerSection />
+          </section>
         </div>
       </div>
     </div>
