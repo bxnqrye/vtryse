@@ -1,3 +1,5 @@
+Currently under development.
+
 ## Live Demo
 https://vtryse.vercel.app
 
@@ -75,4 +77,4 @@ export default defineConfig([
 ]);
 ```
 
-@incognxtq
+@bxnarye
