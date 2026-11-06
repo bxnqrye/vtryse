@@ -120,7 +120,6 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
             to="/dashboard"
             className={linkClass("/dashboard")}
             onClick={() => setIsOpen(false)}
-            hover={"hover:bg-(--g-trace)"}
           >
             Dashboard
           </Link>
