@@ -78,3 +78,17 @@ body {
     transparent 70%
   );
 }
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+.wave-char {
+  display: inline-block;
+  animation: wave 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-char { animation: none; }
+}
+
+html:has(.home-page) { scroll-behavior: smooth; }
