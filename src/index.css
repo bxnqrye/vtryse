@@ -103,10 +103,6 @@ html:has(.home-page) { scroll-behavior: smooth; }
   .logo-spin { animation: none; }
 }
 
-@keyframes glow-wave {
-  0%, 100% { transform: translate(-8%, 0) scale(1); }
-  50%      { transform: translate(8%, 18%) scale(1.12); }
-}
 .home-glow-top {
   position: fixed;
   inset: 0 0 auto 0;
@@ -115,20 +111,5 @@ html:has(.home-page) { scroll-behavior: smooth; }
   pointer-events: none;
   z-index: 0;
 }
-.home-glow-top::before,
-.home-glow-top::after {
-  content: '';
-  position: absolute;
-  top: -12rem;
-  width: 60vw;
-  min-width: 28rem;
-  height: 22rem;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, var(--h-glow), transparent);
-  filter: blur(30px);
-}
-.home-glow-top::before { left: 5%;  animation: glow-wave 9s ease-in-out infinite; }
-.home-glow-top::after  { right: 5%; animation: glow-wave 11s ease-in-out infinite reverse; animation-delay: -3s; }
-@media (prefers-reduced-motion: reduce) {
-  .home-glow-top::before, .home-glow-top::after { animation: none; }
-}
+
+.font-title { font-family: 'Poppins', sans-serif; }

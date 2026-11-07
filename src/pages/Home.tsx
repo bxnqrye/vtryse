@@ -23,7 +23,7 @@ const LEGAL_LINKS = [
 const SOCIALS = [{ url: 'https://github.com/bxnqrye', label: 'GitHub' }]
 
 function iconFor(url: string) {
-  let host = ''
+  let host: string
   try {
     host = new URL(url).hostname
   } catch {
@@ -79,18 +79,23 @@ function Reveal({
 }
 
 // Gentle per-letter wave. Words stay together so text still wraps on small screens.
+// `start` = number of letters (spaces excluded) in the text before this one, so the wave continues.
 function Wave({ text, start = 0 }: { text: string; start?: number }) {
-  let index = start
+  const words = text.split(' ')
+  const offsets = words.map(
+    (_, i) => start + words.slice(0, i).reduce((n, w) => n + w.length, 0)
+  )
+
   return (
     <span className="block" aria-label={text}>
-      {text.split(' ').map((word, wi) => (
+      {words.map((word, wi) => (
         <span key={wi} aria-hidden="true">
           <span className="inline-block whitespace-nowrap">
             {word.split('').map((ch, ci) => (
               <span
                 key={ci}
                 className="wave-char"
-                style={{ animationDelay: `${index++ * 0.08 - 10}s` }}
+                style={{ animationDelay: `${(offsets[wi] + ci) * 0.08 - 10}s` }}
               >
                 {ch}
               </span>
@@ -138,6 +143,7 @@ function Home() {
     }
   }, [])
 
+  // Scroll progress -> glow position + "Trace It" bar
   useEffect(() => {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
@@ -145,10 +151,11 @@ function Home() {
       rootRef.current?.style.setProperty('--sp', String(p))
       setFilled(Math.max(1, Math.round(p * 12)))
     }
-    onScroll()
+    const first = requestAnimationFrame(onScroll)
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     return () => {
+      cancelAnimationFrame(first)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
@@ -157,11 +164,10 @@ function Home() {
   return (
     <div
       ref={rootRef}
-      className="home-page font-hand relative min-h-dvh overflow-x-hidden bg-(--h-bg) text-(--h-text)"
+      className="home-page font-hand relative min-h-dvh overflow-x-clip bg-(--h-bg) text-(--h-text)"
     >
-      {/* Pink glow that follows the scroll */}
+      {/* Pink glows: bottom follows the scroll, top sways */}
       <div className="home-glow fixed inset-0 pointer-events-none z-0" />
-      <div className="home-glow-top" />
 
       {/* Top-left: light / dark toggle */}
       <div className="fixed top-3 left-3 sm:top-6 sm:left-8 z-50 flex items-center gap-1 rounded-xl sm:rounded-2xl bg-(--h-pill) backdrop-blur-md p-1 sm:p-1.5">
@@ -215,24 +221,25 @@ function Home() {
       <div className="relative z-10">
         {/* 1. Hero */}
         <section className="relative min-h-dvh flex flex-col items-center justify-center px-[5vw] pt-28 pb-10 sm:pt-10 text-center">
+          <div className="absolute inset-0 bg-linear-to-b from-(--h-hero) to-transparent pointer-events-none" />
           <img
             src="/VTryse_logo.png"
             alt="vtryse logo"
             className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
-          <h1 className="relative font-display font-bold tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
+          <h1 className="font-['Poppins'] relative font-display font-bold tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             vtryse
           </h1>
-          <p className="t-main opacity-60 relative mt-3 text-[clamp(1.05rem,2.8vw,1.6rem)] font-bold leading-snug max-w-[90vw]">
+          <p className="relative mt-3 opacity-70 text-[clamp(1.05rem,2.8vw,1.6rem)] leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
-            <Wave text="See how far you've come." start={43} />
+            <Wave text="See how far you've come." start={38} />
           </p>
         </section>
 
-        {/* 3. Features */}
+        {/* 2. Features */}
         <section className="flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
-            <h2 className="text-[#d9607a] text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
+            <h2 className="text-(--h-pink) text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
               FEATURES
             </h2>
           </Reveal>
@@ -274,7 +281,7 @@ function Home() {
           </div>
         </section>
 
-        {/* 4. Footer */}
+        {/* 3. Footer */}
         <section className="flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
           <Reveal className="flex flex-col items-center">
             <nav className="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2 text-[clamp(0.95rem,2.2vw,1.25rem)] tracking-wide sm:tracking-widest">
