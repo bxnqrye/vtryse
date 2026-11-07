@@ -18,6 +18,8 @@ const TYPE_COLORS: Record<string, string> = {
   note: '#DE9E9E',
 }
 
+const canNotify = () => typeof window !== 'undefined' && 'Notification' in window
+
 function getLocalDateString(date: Date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -32,7 +34,7 @@ function Notifications() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
+    if (canNotify() && Notification.permission === 'default') {
       Notification.requestPermission()
     }
   }, [])
@@ -56,7 +58,7 @@ function Notifications() {
 
     if (!error && data) {
       data.forEach((reminder) => {
-        if (!notifiedIds.includes(reminder.id) && Notification.permission === 'granted') {
+        if (!notifiedIds.includes(reminder.id) && canNotify() && Notification.permission === 'granted') {
           new Notification(`[${reminder.type}] ${reminder.title}`, {
             body: `Due: ${reminder.event_date}${reminder.event_time ? ' at ' + reminder.event_time : ''}`,
             icon: '/VTryse_logo.png',
@@ -99,7 +101,7 @@ function Notifications() {
 
   return (
     <div className="flex-1 overflow-y-auto min-h-0">
-      <p className="g-label text-xs hover:bg-(g--hover) rounded font-semibold text-center bg-[#6d5758]/20 px-1 mb-2">R E M I N D E R S</p>
+      <p className="g-label text-xs hover:bg-(--g-hover) rounded font-semibold text-center bg-[#6d5758]/20 px-1 mb-2">R E M I N D E R S</p>
 
       {visibleReminders.length === 0 ? (
         <p className="text-xs t-muted px-1">Nothing due soon</p>

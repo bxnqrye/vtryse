@@ -32,10 +32,11 @@ function Settings() {
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
-      .update({ avatar_url: newAvatarUrl })
-      .eq("id", user.id);
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
 
     if (error) {
       setErrorMsg(error.message);
@@ -112,7 +113,8 @@ function Settings() {
 
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: user.id, name, username, avatar_url: newAvatarUrl, theme });
+      .update({ avatar_url: newAvatarUrl })
+      .eq("id", user.id);
 
     if (error) setErrorMsg(error.message);
     else setSuccessMsg("Profile picture updated!");
@@ -243,20 +245,21 @@ function Settings() {
     }
   };
 
-  const card = "glass p-5 transition-colors hover:shadow-[0_0_24px_rgba(109,87,88,0.5)] hover:bg-trace/20 hover:border-trace";
+  const card =
+    "glass p-4 sm:p-5";
   const okText = "text-green-700 dark:text-green-400";
   const errText = "text-red-600 dark:text-red-400";
 
   return (
-    <div className="p-4 md:p-6 max-w-5xl mx-auto">
-      <header className="mb-5">
+    <div className="p-3 sm:p-4 md:p-6 max-w-5xl mx-auto">
+      <header className="mb-4 sm:mb-5">
         <p className="g-label mb-1">Preferences</p>
-        <h1 className="text-2xl font-semibold t-main">Settings</h1>
+        <h1 className="text-[clamp(1.25rem,4vw,1.5rem)] font-semibold t-main">Settings</h1>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-start">
         {/* Left column */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:gap-4 min-w-0">
           {/* Account */}
           <div className={card}>
             <p className="g-label mb-4">Account</p>
@@ -364,7 +367,7 @@ function Settings() {
         </div>
 
         {/* Right column */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:gap-4 min-w-0">
           {/* Privacy */}
           <div className={card}>
             <p className="g-label mb-4">Privacy</p>
@@ -423,7 +426,7 @@ function Settings() {
                 {shareCode && (
                   <div className="glass-soft mt-3 p-3">
                     <p className="text-[11px] t-muted mb-1">Share this code</p>
-                    <p className="text-lg font-mono font-semibold t-accent tracking-widest">
+                    <p className="text-lg font-mono font-semibold t-accent tracking-widest break-all">
                       {shareCode}
                     </p>
                   </div>
@@ -445,7 +448,7 @@ function Settings() {
                       value={redeemCode}
                       onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
                       maxLength={6}
-                      className="glass-input flex-1 font-mono tracking-widest"
+                      className="glass-input flex-1 min-w-0 font-mono tracking-widest"
                     />
                     <button onClick={handleAcceptSharing} className="btn btn-primary">
                       Join
@@ -463,10 +466,10 @@ function Settings() {
           </div>
 
           {/* Danger Zone */}
-          <div className="glass glass-danger p-5">
+          <div className="glass glass-danger p-4 sm:p-5">
             <p className="text-[11px] font-bold text-(--g-danger) uppercase tracking-widest mb-2">
               Danger Zone
-          </p>
+            </p>
             <p className="text-xs t-muted mb-4">
               This action is permanent and cannot be undone.
             </p>

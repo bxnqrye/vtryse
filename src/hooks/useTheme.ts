@@ -26,14 +26,22 @@ export function useTheme() {
         .eq('id', user.id)
         .maybeSingle()
 
-      applyTheme(data?.theme || 'dark')
+      applyTheme(data?.theme || localStorage.getItem('vtryse-theme') || 'dark')
     }
 
     init()
 
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') setTimeout(init, 0)
+    })
+
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const listener = () => init()
     mediaQuery.addEventListener('change', listener)
-    return () => mediaQuery.removeEventListener('change', listener)
+
+    return () => {
+      sub.subscription.unsubscribe()
+      mediaQuery.removeEventListener('change', listener)
+    }
   }, [])
 }
