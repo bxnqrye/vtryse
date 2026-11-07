@@ -177,7 +177,7 @@ function Home() {
           <img
             src="/VTryse_logo.png"
             alt="vtryse logo"
-            className="relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
+            className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
           <h1 className="relative font-display font-bold tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             vtryse

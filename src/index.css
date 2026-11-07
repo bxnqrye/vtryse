@@ -92,3 +92,13 @@ body {
 }
 
 html:has(.home-page) { scroll-behavior: smooth; }
+
+@keyframes logo-spin {
+  to { transform: rotate(360deg); }
+}
+.logo-spin {
+  animation: logo-spin 24s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-spin { animation: none; }
+}
