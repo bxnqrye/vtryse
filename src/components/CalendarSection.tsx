@@ -257,6 +257,7 @@ function CalendarSection() {
         setErrorMsg(error.message)
       } else {
         resetForm()
+        setShowForm(false)
         fetchEvents()
         notifyDataChanged()
       }
@@ -285,6 +286,7 @@ function CalendarSection() {
         setErrorMsg(error.message)
       } else {
         resetForm()
+        setShowForm(false)
         fetchEvents()
         notifyDataChanged()
       }
@@ -295,19 +297,19 @@ function CalendarSection() {
 
   return (
     <div>
-      <h2 className="g-label text-sm mb-4">Calendar</h2>
+      <h2 className="text-center g-label text-sm mb-0">Calendar</h2>
 
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => setCurrentMonth(new Date(year, month - 1, 1))} className="btn btn-ghost btn-sm !px-3">‹</button>
-        <p className="text-base font-semibold">{monthLabel}</p>
+        <p className="text-[#3f8a52] text-base font-semibold mb-3">{monthLabel}</p>
         <button onClick={() => setCurrentMonth(new Date(year, month + 1, 1))} className="btn btn-ghost btn-sm !px-3">›</button>
       </div>
 
-      <div className="grid grid-cols-7 text-center text-[10px] font-semibold t-muted mb-1.5">
+      <div className="grid grid-cols-7 text-[#3f8a52] text-center text-[10px] font-bold t-muted mb-1.5">
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i}>{d}</div>)}
       </div>
 
-      <div className="grid grid-cols-7 gap-1.5 mb-6">
+      <div className="text-center glass p-5 transition-colors grid grid grid-cols-7 gap-1.5 mb-6">
         {cells.map((date, i) => {
           const dayEvents = date ? eventsForDate(date) : []
           return (
@@ -434,17 +436,28 @@ function CalendarSection() {
           </ul>
 
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => setShowForm(true)}
             className="w-full text-left font-semibold text-[11px] tracking-widest t-accent hover:opacity-80 flex items-center mb-2"
           >
-            {showForm ? '▾ HIDE' : '▸ ADD NEW'}
+            + ADD NEW
           </button>
 
-          {showForm && (
+          <Modal
+            open={showForm}
+            onClose={() => { resetForm(); setShowForm(false) }}
+            className="max-w-xl"
+          >
             <div className="flex flex-col gap-2">
-              {editingId && (
-                <p className="text-[12px] font-semibold t-muted tracking-widest">EDITING</p>
-              )}
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-sm font-semibold">{editingId ? 'Edit' : `New on ${selectedDate}`}</p>
+                <button
+                  onClick={() => { resetForm(); setShowForm(false) }}
+                  className="t-muted hover:text-(--g-danger) text-xs"
+                >
+                  ✕
+                </button>
+              </div>
+
               <div className="flex gap-1.5">
                 {TYPE_OPTIONS.map((t) => (
                   <button
@@ -513,15 +526,14 @@ function CalendarSection() {
                 <button onClick={handleSaveEvent} disabled={uploading} className="btn btn-primary">
                   {uploading ? 'Uploading...' : editingId ? 'Save Changes' : 'Add'}
                 </button>
-                {editingId && (
-                  <button onClick={() => { resetForm(); setShowForm(false) }} className="btn btn-ghost">
-                    Cancel
-                  </button>
-                )}
+                <button onClick={() => { resetForm(); setShowForm(false) }} className="btn btn-ghost">
+                  Cancel
+                </button>
               </div>
               {errorMsg && <p className="text-red-600 dark:text-red-400 text-xs">{errorMsg}</p>}
             </div>
-          )}
+          </Modal>
+
         </div>
       )}
 

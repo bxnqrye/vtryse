@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 
+const inputClass =
+  'w-full bg-(--h-card) border border-(--h-card-border) p-2.5 rounded-xl text-lg text-(--h-text) placeholder:text-(--h-text)/50 focus:outline-none focus:border-(--h-pink) focus:shadow-[0_0_18px_var(--h-glow)] transition'
+
 function Login() {
   const location = useLocation()
   const isSignup = location.pathname === '/signup'
@@ -50,13 +53,22 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-void px-4">
-      <div className="w-full max-w-sm p-8 bg-void border border-surface rounded-xl">
-        <Link to="/" className="block text-2xl font-bold mb-6 text-trace">
+    <div
+      className="home-page font-hand relative min-h-screen flex items-center justify-center bg-(--h-bg) text-(--h-text) px-4 overflow-hidden"
+      style={{ '--sp': 0.5 } as React.CSSProperties}
+    >
+      <div className="home-glow absolute inset-0 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-(--h-hero) to-transparent pointer-events-none" />
+
+      <div className="relative w-full max-w-sm p-8 bg-(--h-card) backdrop-blur-xl border border-(--h-card-border) rounded-3xl shadow-[0_0_60px_var(--h-glow)]">
+        <Link
+          to="/"
+          className="block text-center font-display font-bold text-5xl mb-5 text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
+        >
           vtryse
         </Link>
 
-        <h2 className="text-lg font-medium mb-2 text-text-primary">
+        <h2 className="text-2xl font-bold mb-4 text-center">
           {isSignup ? 'Create your account' : 'Hello again'}
         </h2>
 
@@ -68,14 +80,14 @@ function Login() {
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-void border border-border-subtle p-2 rounded-lg text-text-primary placeholder:text-text-muted"
+                className={inputClass}
               />
               <input
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="bg-void border border-border-subtle p-2 rounded-lg text-text-primary placeholder:text-text-muted"
+                className={inputClass}
               />
             </>
           )}
@@ -84,38 +96,38 @@ function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="bg-void border border-border-subtle p-2 rounded-lg text-text-primary placeholder:text-text-muted"
+            className={inputClass}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="bg-void border border-border-subtle p-2 rounded-lg text-text-primary placeholder:text-text-muted"
+            className={inputClass}
           />
         </div>
 
         <button
           onClick={isSignup ? handleSignUp : handleLogin}
-          className="w-full mt-4 bg-trace hover:bg-surface text-white border border-border-subtle px-4 py-2 rounded-lg text-base font-medium transition-colors"
+          className="w-full mt-5 bg-(--h-btn) text-white px-4 py-2 rounded-xl text-xl font-bold tracking-wider hover:shadow-[0_0_28px_var(--h-glow)] transition-shadow"
         >
           {isSignup ? 'Sign Up' : 'Log In'}
         </button>
 
-        {errorMsg && <p className="mt-3 text-sm text-red-400">{errorMsg}</p>}
+        {errorMsg && <p className="mt-3 text-base text-center text-(--h-pink)">{errorMsg}</p>}
 
-        <p className="mt-4 text-sm text-text-muted text-center">
+        <p className="mt-5 text-lg text-center opacity-80">
           {isSignup ? (
             <>
               Already have an account?{' '}
-              <Link to="/login" className="text-trace hover:underline">
+              <Link to="/login" className="text-(--h-pink) font-bold hover:underline">
                 Log in
               </Link>
             </>
           ) : (
             <>
               Don't have an account yet?{' '}
-              <Link to="/signup" className="text-trace hover:underline">
+              <Link to="/signup" className="text-(--h-pink) font-bold hover:underline">
                 Sign up
               </Link>
             </>

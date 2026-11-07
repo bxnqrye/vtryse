@@ -27,7 +27,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <main
         className={
           showSidebar
-            ? `${collapsed ? 'md:ml-14' : 'md:ml-62'} pt-18 md:pt-0 transition-[margin] duration-200`
+            ? `${collapsed ? 'md:ml-14' : 'md:ml-60'} pt-18 md:pt-0 transition-[margin] duration-200`
             : ''
         }
       >

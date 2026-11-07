@@ -74,7 +74,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
       {/* Sidebar */}
       <aside
-        className={`w-56 fixed left-3 top-3 bottom-3 z-50 glass rounded-2xl flex flex-col p-4 transition-transform duration-200 bg-[#6d5758]/20
+        className={`w-56 fixed left-0 top-0 bottom-0 z-50 glass rounded-l-none rounded-r-3xl border-l-0 flex flex-col p-4 transition-transform duration-200 bg-[#6d5758]/20
         ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} ${collapsed ? "md:-translate-x-[120%]" : "md:translate-x-0"}`}
       >
         {/* Desktop hide button */}
@@ -88,7 +88,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
         <div className="mb-6 px-2 hidden md:block">
           <h1 className="text-2xl text-trace font-bold tracking-wide">vtryse</h1>
-          <p className="text-[11px] t-accent font-bold tracking-wide">Trace Your Progress</p>
+          <p className="text-[#3f8a52] text-[11px] t-accent font-bold tracking-wide">Trace Your Progress</p>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
@@ -115,7 +115,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
           </div>
         </div>
 
-        <nav className="text-sm flex flex-col gap-1 mb-6 font-bold">
+        <nav className="text-[#3f8a52] text-sm flex flex-col gap-1 mb-6 font-bold">
           <Link
             to="/dashboard"
             className={linkClass("/dashboard")}

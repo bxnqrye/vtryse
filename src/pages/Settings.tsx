@@ -32,11 +32,10 @@ function Settings() {
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .maybeSingle();
+      .update({ avatar_url: newAvatarUrl })
+      .eq("id", user.id);
 
     if (error) {
       setErrorMsg(error.message);
@@ -75,13 +74,8 @@ function Settings() {
 
     const { error } = await supabase
       .from("profiles")
-      .upsert({
-        id: user.id,
-        name,
-        username,
-        avatar_url: avatarUrl,
-        theme: newTheme,
-      });
+      .update({ theme: newTheme })
+      .eq("id", user.id);
 
     if (error) setErrorMsg(error.message);
   };
@@ -130,22 +124,14 @@ function Settings() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log("CURRENT USER:", user);
-
-    const { data: whoamiData, error: whoamiError } =
-      await supabase.rpc("whoami");
-    console.log("WHOAMI:", whoamiData, whoamiError);
-
     if (!user) return;
-
-    console.log("UPSERT PAYLOAD ID:", user.id);
 
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: user.id, name, username, avatar_url: avatarUrl, theme });
+      .update({ name, username })
+      .eq("id", user.id);
 
     if (error) {
-      console.log("UPSERT ERROR:", error);
       setErrorMsg(error.message);
       setSuccessMsg("");
     } else {
@@ -225,15 +211,8 @@ function Settings() {
 
     const { error } = await supabase
       .from("profiles")
-      .upsert({
-        id: user.id,
-        name,
-        username,
-        avatar_url: avatarUrl,
-        theme,
-        country,
-        timezone,
-      });
+      .update({ country, timezone })
+      .eq("id", user.id);
 
     if (error) setLocationMsg(error.message);
     else setLocationMsg("Location saved!");
@@ -484,10 +463,10 @@ function Settings() {
           </div>
 
           {/* Danger Zone */}
-          <div className={`${card} glass-danger`}>
+          <div className="glass glass-danger p-5">
             <p className="text-[11px] font-bold text-(--g-danger) uppercase tracking-widest mb-2">
               Danger Zone
-            </p>
+          </p>
             <p className="text-xs t-muted mb-4">
               This action is permanent and cannot be undone.
             </p>

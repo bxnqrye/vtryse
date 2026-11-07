@@ -42,7 +42,7 @@ function Dashboard() {
         </section>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start">
-          <section className="glass p-5 transition-colors hover:bg-trace/20 hover:border-trace">
+          <section className="bg:trace/50 shadow-[0_0_24px_rgba(109,87,88,0.5)] bg-trace/20 hover:border-trace glass p-5">
             <CalendarSection />
           </section>
           <section className="glass p-5">

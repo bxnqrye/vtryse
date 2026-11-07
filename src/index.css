@@ -46,3 +46,35 @@ body {
   --color-text-primary: #ffffff;
   --color-text-muted: #8b8a99;
 }
+
+.font-hand { font-family: 'Gaegu', cursive; }
+
+.home-page {
+  --sp: 0;
+  --h-bg: #f5eeee;
+  --h-hero: #ffffff;
+  --h-text: #2a1d1f;
+  --h-card: rgba(109, 87, 88, 0.1);
+  --h-card-border: rgba(109, 87, 88, 0.22);
+  --h-pill: rgba(109, 87, 88, 0.15);
+  --h-pink: #d9607a;
+  --h-btn: #c9777f;
+  --h-glow: rgba(232, 137, 154, 0.55);
+}
+.dark .home-page {
+  --h-bg: #1f1a1a;
+  --h-hero: #000000;
+  --h-text: #ffffff;
+  --h-card: rgba(255, 255, 255, 0.07);
+  --h-card-border: rgba(255, 255, 255, 0.08);
+  --h-pill: rgba(255, 255, 255, 0.16);
+  --h-pink: #e58a9b;
+  --h-glow: rgba(232, 137, 154, 0.38);
+}
+.home-glow {
+  background: radial-gradient(
+    70rem 32rem at calc(30% + var(--sp) * 40%) calc(110% - var(--sp) * 8%),
+    var(--h-glow),
+    transparent 70%
+  );
+}
