@@ -54,7 +54,9 @@ function DashboardHeader() {
               const json = await res.json()
               temp = json?.current_weather?.temperature ?? null
               weather = weatherCodeToText(json?.current_weather?.weathercode)
-            } catch {}
+            } catch {
+              // weather is optional; ignore network errors
+            }
           }
 
           return {

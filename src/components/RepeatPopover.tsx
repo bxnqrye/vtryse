@@ -34,7 +34,7 @@ export function generateOccurrenceDates(startDate: string, config: RepeatConfig)
   const dates: string[] = []
   const start = new Date(startDate + 'T00:00:00')
 
-  let unit: 'day' | 'week' | 'month' | 'year' = 'week'
+  let unit: 'day' | 'week' | 'month' | 'year'
   let interval = 1
   let days: string[] = []
 

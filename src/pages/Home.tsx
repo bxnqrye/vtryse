@@ -21,7 +21,11 @@ const SOCIALS = [{ url: 'https://github.com/bxnqrye', label: 'GitHub' }]
 
 function iconFor(url: string) {
   let host = ''
-  try { host = new URL(url).hostname } catch {}
+  try {
+    host = new URL(url).hostname
+  } catch {
+    host = ''
+  }
   if (host.includes('github')) return { id: 'github-icon', invert: true }
   if (host.includes('x.com') || host.includes('twitter')) return { id: 'x-icon', invert: true }
   if (host.includes('discord')) return { id: 'discord-icon', invert: true }

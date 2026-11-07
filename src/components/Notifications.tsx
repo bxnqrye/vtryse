@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../supabaseClient'
 
 interface Reminder {
@@ -30,8 +30,8 @@ function getLocalDateString(date: Date) {
 function Notifications() {
   const [reminders, setReminders] = useState<Reminder[]>([])
   const [dismissed, setDismissed] = useState<string[]>([])
-  const [notifiedIds, setNotifiedIds] = useState<string[]>([])
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const notifiedIds = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     if (canNotify() && Notification.permission === 'default') {
@@ -39,52 +39,48 @@ function Notifications() {
     }
   }, [])
 
-  const checkUpcoming = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+  useEffect(() => {
+    let cancelled = false
 
-    const today = new Date()
-    const todayStr = getLocalDateString(today)
+    const checkUpcoming = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user || cancelled) return
 
-    const tomorrow = new Date()
-    tomorrow.setDate(today.getDate() + 1)
-    const tomorrowStr = getLocalDateString(tomorrow)
+      const today = new Date()
+      const tomorrow = new Date()
+      tomorrow.setDate(today.getDate() + 1)
 
-    const { data, error } = await supabase
-      .from('calendar_events')
-      .select('id, title, event_date, event_time, type, description, attachment_url')
-      .in('event_date', [todayStr, tomorrowStr])
-      .eq('status', 'ongoing')
+      const { data, error } = await supabase
+        .from('calendar_events')
+        .select('id, title, event_date, event_time, type, description, attachment_url')
+        .in('event_date', [getLocalDateString(today), getLocalDateString(tomorrow)])
+        .eq('status', 'ongoing')
 
-    if (!error && data) {
+      if (cancelled || error || !data) return
+
       data.forEach((reminder) => {
-        if (!notifiedIds.includes(reminder.id) && canNotify() && Notification.permission === 'granted') {
+        if (!notifiedIds.current.has(reminder.id) && canNotify() && Notification.permission === 'granted') {
           new Notification(`[${reminder.type}] ${reminder.title}`, {
             body: `Due: ${reminder.event_date}${reminder.event_time ? ' at ' + reminder.event_time : ''}`,
             icon: '/VTryse_logo.png',
           })
-          setNotifiedIds((prev) => [...prev, reminder.id])
+          notifiedIds.current.add(reminder.id)
         }
       })
       setReminders(data)
     }
-  }
 
-  useEffect(() => {
     checkUpcoming()
 
     const channel = supabase
       .channel('calendar_events_changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'calendar_events' },
-        () => {
-          checkUpcoming()
-        }
-      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'calendar_events' }, () => {
+        checkUpcoming()
+      })
       .subscribe()
 
     return () => {
+      cancelled = true
       supabase.removeChannel(channel)
     }
   }, [])

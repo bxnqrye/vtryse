@@ -26,33 +26,39 @@ function Settings() {
   const [timezone, setTimezone] = useState("UTC");
   const [locationMsg, setLocationMsg] = useState("");
 
-  const fetchProfile = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (error) {
-      setErrorMsg(error.message);
-    } else if (data) {
-      setName(data.name || "");
-      setUsername(data.username || "");
-      setAvatarUrl(data.avatar_url || "");
-      setThemeState(data.theme || "dark");
-      setShareLocation(data.share_location !== false);
-      setCountry(data.country || "");
-      setTimezone(data.timezone || "UTC");
-    }
-  };
-
   useEffect(() => {
-    fetchProfile();
+    let cancelled = false;
+
+    const load = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user || cancelled) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+
+      if (error) {
+        setErrorMsg(error.message);
+      } else if (data) {
+        setName(data.name || "");
+        setUsername(data.username || "");
+        setAvatarUrl(data.avatar_url || "");
+        setThemeState(data.theme || "dark");
+        setShareLocation(data.share_location !== false);
+        setCountry(data.country || "");
+        setTimezone(data.timezone || "UTC");
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const applyTheme = (selectedTheme: string) => {
@@ -245,8 +251,7 @@ function Settings() {
     }
   };
 
-  const card =
-    "glass p-4 sm:p-5";
+  const card = "glass p-4 sm:p-5";
   const okText = "text-green-700 dark:text-green-400";
   const errText = "text-red-600 dark:text-red-400";
 

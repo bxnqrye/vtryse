@@ -237,7 +237,7 @@ function CalendarSection() {
     }
 
     if (editingId) {
-      const updatePayload: any = {
+      const updatePayload: Partial<CalendarEvent> = {
         type,
         title,
         description,
@@ -309,7 +309,7 @@ function CalendarSection() {
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i}>{d}</div>)}
       </div>
 
-      <div className="text-center glass p-5 transition-colors grid grid grid-cols-7 gap-1.5 mb-6">
+      <div className="text-center glass p-2 sm:p-5 grid grid-cols-7 gap-1 sm:gap-1.5 mb-6">
         {cells.map((date, i) => {
           const dayEvents = date ? eventsForDate(date) : []
           return (
@@ -322,7 +322,7 @@ function CalendarSection() {
                   setShowForm(false)
                 }
               }}
-              className={`min-h-16 rounded-lg text-[10px] p-1 relative
+              className={`min-h-12 sm:min-h-16 rounded-lg text-[10px] p-1 relative
                 ${date ? 'g-cell cursor-pointer' : ''}
                 ${selectedDate === date ? 'g-cell-selected' : ''}`}
             >
@@ -533,7 +533,6 @@ function CalendarSection() {
               {errorMsg && <p className="text-red-600 dark:text-red-400 text-xs">{errorMsg}</p>}
             </div>
           </Modal>
-
         </div>
       )}
 
