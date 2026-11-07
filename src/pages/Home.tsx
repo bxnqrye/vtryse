@@ -192,8 +192,8 @@ function Home() {
       </div>
 
       {/* Top-right: scroll progress + auth buttons */}
-      <div className="fixed top-3 right-3 sm:top-6 sm:right-8 z-50 flex flex-col items-center gap-0.5 sm:gap-1">
-        <span className="text-[clamp(0.9rem,2.4vw,1.25rem)] tracking-widest">Trace It</span>
+      <div className="fixed top-3 right-3 sm:top-6 sm:right-8 z-50 flex flex-col items-center gap-0.5 sm:gap-0">
+        <span className="text-[16px] tracking-widest">Trace It</span>
         <div className="flex gap-[2px] sm:gap-[3px] mb-1 sm:mb-2">
           {Array.from({ length: 12 }).map((_, i) => (
             <span
@@ -237,13 +237,13 @@ function Home() {
         </section>
 
         {/* 2. Features */}
-        <section className="flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
+        <section className="font-gaeru flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
             <h2 className="text-(--h-pink) text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
-              FEATURES
+              ‿︵‿୨ FEATURES ୧‿︵‿
             </h2>
           </Reveal>
-          <div className="w-full max-w-6xl flex flex-wrap justify-center [--fg:clamp(1rem,2.5vw,2rem)] gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
+          <div className="full max-w-6xl flex flex-wrap justify-center [--fg:clamp(1rem,2.5vw,2rem)] gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
             {FEATURES.map((f, i) => {
               const on = active === f.name
               return (
@@ -282,7 +282,7 @@ function Home() {
         </section>
 
         {/* 3. Footer */}
-        <section className="flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
+        <section className="font-gaeru flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
           <Reveal className="flex flex-col items-center">
             <nav className="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2 text-[clamp(0.95rem,2.2vw,1.25rem)] tracking-wide sm:tracking-widest">
               {LEGAL_LINKS.map((l, i) => (

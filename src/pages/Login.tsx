@@ -63,13 +63,13 @@ function Login() {
       <div className="relative w-full max-w-sm p-8 bg-(--h-card) backdrop-blur-xl border border-(--h-card-border) rounded-3xl shadow-[0_0_60px_var(--h-glow)]">
         <Link
           to="/"
-          className="block text-center font-display font-bold text-5xl mb-5 text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
+          className="font-cherry block text-center font-display text-5xl mb-2 text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
         >
           vtryse
         </Link>
 
         <h2 className="text-2xl font-bold mb-4 text-center">
-          {isSignup ? 'Create your account' : 'Hello again'}
+          {isSignup ? 'Create your account' : 'Hello again : )'}
         </h2>
 
         <div className="flex flex-col gap-3">
