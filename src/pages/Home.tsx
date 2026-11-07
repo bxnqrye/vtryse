@@ -240,7 +240,7 @@ function Home() {
         <section className="font-gaeru flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
             <h2 className="text-(--h-pink) text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
-              ‿︵‿୨ FEATURES ୧‿︵‿
+              <Wave text="‿︵‿୨ FEATURES ୧‿︵‿ " />
             </h2>
           </Reveal>
           <div className="full max-w-6xl flex flex-wrap justify-center [--fg:clamp(1rem,2.5vw,2rem)] gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
