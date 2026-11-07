@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Lenis from 'lenis'
+import { supabase } from '../supabaseClient'
 import type { ReactNode } from 'react'
 
 const FEATURES = [
@@ -105,6 +106,24 @@ function Home() {
   const rootRef = useRef<HTMLDivElement>(null)
   const [filled, setFilled] = useState(1)
   const [active, setActive] = useState<string | null>(null)
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
+
+  // Keep the toggle in sync if the theme is changed elsewhere (e.g. useTheme loading your saved theme)
+  useEffect(() => {
+    const obs = new MutationObserver(() =>
+      setIsDark(document.documentElement.classList.contains('dark'))
+    )
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+
+  const setTheme = async (mode: 'light' | 'dark') => {
+    document.documentElement.classList.toggle('dark', mode === 'dark')
+    localStorage.setItem('vtryse-theme', mode)
+    setIsDark(mode === 'dark')
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) await supabase.from('profiles').update({ theme: mode }).eq('id', user.id)
+  }
 
   // Smooth wheel / touch scrolling
   useEffect(() => {
@@ -142,6 +161,29 @@ function Home() {
     >
       {/* Pink glow that follows the scroll */}
       <div className="home-glow fixed inset-0 pointer-events-none z-0" />
+      <div className="home-glow-top" />
+
+      {/* Top-left: light / dark toggle */}
+      <div className="fixed top-3 left-3 sm:top-6 sm:left-8 z-50 flex items-center gap-1 rounded-xl sm:rounded-2xl bg-(--h-pill) backdrop-blur-md p-1 sm:p-1.5">
+        <button
+          onClick={() => setTheme('light')}
+          aria-pressed={!isDark}
+          className={`px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[clamp(0.95rem,2.4vw,1.25rem)] tracking-wider transition ${
+            !isDark ? 'bg-(--h-btn) text-white shadow-[0_0_18px_var(--h-glow)]' : 'hover:text-(--h-pink)'
+          }`}
+        >
+          ☀ Light
+        </button>
+        <button
+          onClick={() => setTheme('dark')}
+          aria-pressed={isDark}
+          className={`px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[clamp(0.95rem,2.4vw,1.25rem)] tracking-wider transition ${
+            isDark ? 'bg-(--h-btn) text-white shadow-[0_0_18px_var(--h-glow)]' : 'hover:text-(--h-pink)'
+          }`}
+        >
+          ☾ Dark
+        </button>
+      </div>
 
       {/* Top-right: scroll progress + auth buttons */}
       <div className="fixed top-3 right-3 sm:top-6 sm:right-8 z-50 flex flex-col items-center gap-0.5 sm:gap-1">
@@ -173,7 +215,6 @@ function Home() {
       <div className="relative z-10">
         {/* 1. Hero */}
         <section className="relative min-h-dvh flex flex-col items-center justify-center px-[5vw] pt-28 pb-10 sm:pt-10 text-center">
-          <div className="absolute inset-0 bg-linear-to-b from-(--h-hero) to-transparent pointer-events-none" />
           <img
             src="/VTryse_logo.png"
             alt="vtryse logo"
@@ -182,26 +223,16 @@ function Home() {
           <h1 className="relative font-display font-bold tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             vtryse
           </h1>
-          <p className="relative mt-3 text-[clamp(1.05rem,2.8vw,1.6rem)] font-bold leading-snug max-w-[90vw]">
+          <p className="t-main opacity-60 relative mt-3 text-[clamp(1.05rem,2.8vw,1.6rem)] font-bold leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
             <Wave text="See how far you've come." start={43} />
           </p>
         </section>
 
-        {/* 2. About */}
-        <section className="flex justify-center px-[6vw] py-[clamp(4rem,14vw,9rem)]">
-          <Reveal>
-            <p className="max-w-4xl text-center text-[clamp(1.25rem,3.4vw,2rem)] font-bold leading-relaxed">
-              A personal progress and journal tracker designed to help you organize your goals,
-              document your journey, and keep track of how far you've come.
-            </p>
-          </Reveal>
-        </section>
-
         {/* 3. Features */}
         <section className="flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
-            <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
+            <h2 className="text-[#d9607a] text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
               FEATURES
             </h2>
           </Reveal>

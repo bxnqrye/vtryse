@@ -16,7 +16,7 @@ export function useTheme() {
     const init = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        applyTheme('dark')
+        applyTheme(localStorage.getItem('vtryse-theme') || 'dark')
         return
       }
 
