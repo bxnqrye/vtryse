@@ -202,16 +202,16 @@ function Home() {
             />
           ))}
         </div>
-        <div className="flex items-center gap-1 sm:gap-2 rounded-xl sm:rounded-2xl bg-(--h-pill) backdrop-blur-md px-1.5 py-1.5 sm:px-3 sm:py-3">
+        <div className="font-fuzzy flex items-center gap-1 sm:gap-2 rounded-xl bg-(--h-pill) backdrop-blur-md px-1 py-1 sm:px-2 sm:py-2">
           <Link
             to="/login"
-            className="px-2 py-1 sm:px-4 sm:py-1.5 text-[clamp(0.95rem,2.4vw,1.25rem)] tracking-wider hover:text-(--h-pink) transition-colors"
+            className="px-2 py-0.5 sm:px-3 sm:py-1 text-[clamp(0.8rem,2vw,1rem)] tracking-wider hover:text-(--h-pink) transition-colors"
           >
             Log In
           </Link>
           <Link
             to="/signup"
-            className="px-2 py-1 sm:px-4 sm:py-1.5 rounded-lg bg-(--h-btn) text-white text-[clamp(0.95rem,2.4vw,1.25rem)] tracking-wider hover:shadow-[0_0_24px_var(--h-glow)] transition-shadow"
+            className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-lg bg-(--h-btn) text-white text-[clamp(0.8rem,2vw,1rem)] tracking-wider hover:shadow-[0_0_24px_var(--h-glow)] transition-shadow"
           >
             Sign Up
           </Link>
@@ -227,10 +227,10 @@ function Home() {
             alt="vtryse logo"
             className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
-          <h1 className="font-['Poppins'] relative font-display font-bold tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
+          <h1 className="font-cherry relative font-display tracking-tight text-[clamp(3rem,13vw,7rem)] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             vtryse
           </h1>
-          <p className="relative mt-3 opacity-70 text-[clamp(1.05rem,2.8vw,1.6rem)] leading-snug max-w-[90vw]">
+          <p className="font-fuzzy relative mt-7 opacity-70 text-lg leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
             <Wave text="See how far you've come." start={38} />
           </p>

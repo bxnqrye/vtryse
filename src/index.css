@@ -46,8 +46,13 @@ body {
   --color-text-primary: #ffffff;
   --color-text-muted: #8b8a99;
 }
-
+.font-title { font-family: 'Poppins', sans-serif; }
 .font-hand { font-family: 'Gaegu', cursive; }
+.font-dots { font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; }
+.font-encode { font-family: Encode Sans Expanded, sans-serif; }
+.font-cherry { font-family: Cherry Bomb One, sans-serif;}
+.font-fuzzy { font-family: Fuzzy Bubbles, cursive;}
+.font-gaegu { font-family: 'Gaegu&display=swap', cursive; }
 
 .home-page {
   --sp: 0;
@@ -111,5 +116,3 @@ html:has(.home-page) { scroll-behavior: smooth; }
   pointer-events: none;
   z-index: 0;
 }
-
-.font-title { font-family: 'Poppins', sans-serif; }
