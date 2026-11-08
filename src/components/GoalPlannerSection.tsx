@@ -167,10 +167,12 @@ function GoalPlannerSection() {
   }
 
   return (
-    <div>
-      <h2 className="font-fuzzy g-label text-[17px] mb-4">Goal Planner</h2>
+    <div className="h-[590px] min-h-0 flex flex-col overflow-hidden">
+      <h2 className="font-fuzzy g-label text-[17px] mb-4 shrink-0">
+        Goal Planner
+      </h2>
 
-      <div className="glass-soft p-3 flex flex-col gap-2 mb-3">
+      <div className="glass-soft p-3 flex flex-col gap-2 mb-3 shrink-0">
         {editingId && (
           <p className="text-[11px] t-muted">Editing - Save to update, or Cancel below</p>
         )}
@@ -202,7 +204,7 @@ function GoalPlannerSection() {
         {errorMsg && <p className="text-red-600 dark:text-red-400 text-xs">{errorMsg}</p>}
       </div>
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 min-h-0 overflow-y-auto pr-2 soft-scroll">
         {goals.map((goal) => {
           const daysLeft = getDaysRemaining(goal.target_date)
           const goalUpdates = updates.filter((u) => u.goal_id === goal.id)

@@ -5,7 +5,7 @@ import { formatInTimezone } from '../utils/timezone'
 
 interface MemberInfo {
   name: string
-  country: string | null
+  place: string | null
   timezone: string
   weather: string | null
   temp: number | null
@@ -34,22 +34,25 @@ function DashboardHeader() {
     const loadMembers = async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('name, country, timezone, share_location')
+        .select('name, country, timezone, share_location, city, lat, lon')
 
       if (!data) return
 
-      const visible = data.filter((p) => p.share_location !== false && p.country)
+      const visible = data.filter((p) => p.share_location !== false && (p.country || p.city))
 
       const withWeather = await Promise.all(
         visible.map(async (p) => {
           const countryInfo = COUNTRIES.find((c) => c.name === p.country)
+          // Exact area if set, otherwise the country's capital
+          const lat: number | undefined = p.lat ?? countryInfo?.lat
+          const lon: number | undefined = p.lon ?? countryInfo?.lon
           let weather: string | null = null
           let temp: number | null = null
 
-          if (countryInfo) {
+          if (lat !== undefined && lon !== undefined) {
             try {
               const res = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${countryInfo.lat}&longitude=${countryInfo.lon}&current_weather=true`
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
               )
               const json = await res.json()
               temp = json?.current_weather?.temperature ?? null
@@ -59,9 +62,10 @@ function DashboardHeader() {
             }
           }
 
+          const city = p.city ? String(p.city).split(',')[0] : null
           return {
             name: p.name || 'Someone',
-            country: p.country,
+            place: city && p.country ? `${city}, ${p.country}` : (city ?? p.country),
             timezone: p.timezone || 'UTC',
             weather,
             temp,
@@ -86,7 +90,7 @@ function DashboardHeader() {
             key={i}
             className="glass-soft !rounded-full px-3.5 py-1.5 text-xs flex items-center gap-1.5"
           >
-            <span className="font-semibold">{m.country}</span>
+            <span className="font-semibold">{m.place}</span>
             <span className="t-muted">·</span>
             <span>{time}</span>
             {m.weather && (

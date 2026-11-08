@@ -82,10 +82,11 @@ body {
 .home-glow {
   background: radial-gradient(
     70rem 32rem at calc(30% + var(--sp) * 40%) calc(110% - var(--sp) * 8%),
-    var(--h-glow),
+    var(--glow-bg, var(--h-glow)),
     transparent 70%
   );
 }
+.dark .app-shell { --glow-bg: rgba(232, 137, 154, 0.14); }
 
 @keyframes wave {
   0%, 100% { transform: translateY(0); }
@@ -343,3 +344,67 @@ html:has(.app-shell) { font-size: 17px; }
   color: var(--h-pink);
 }
 @media (prefers-reduced-motion: reduce) { .together-link { animation: none; } }
+
+/* Subtle dashboard scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180, 140, 150, 0.35) transparent;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(180, 140, 150, 0.35);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 140, 150, 0.65);
+}
+
+
+/* Subtle dashboard scrollbar */
+.soft-scroll {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  scrollbar-gutter: stable;
+}
+
+/* Firefox */
+.soft-scroll:hover {
+  scrollbar-color: rgba(190, 125, 140, 0.55) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.soft-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.soft-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.soft-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.soft-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(190, 125, 140, 0.55);
+}
+
+.soft-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(190, 125, 140, 0.8);
+}

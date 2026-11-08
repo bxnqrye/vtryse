@@ -137,7 +137,7 @@ function AnalyticsSection() {
 
   return (
     <div>
-      <h2 className="font-fuzzy g-label text-[17px]">Analytics</h2>
+      <h2 className="font-fuzzy g-label text-center text-[17px]">Analytics</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Status chart */}
@@ -292,13 +292,13 @@ function AnalyticsSection() {
 
         {/* Goal deadlines */}
         <div className="min-w-0">
-          <p className="text-sm font-semibold mb-1 lg:h-[30px] flex items-center">Goal Deadlines</p>
-          <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+          <p className="text-sm font-semibold mb-0 lg:h-[30px] flex items-center">Goal Deadlines</p>
+          <div className="space-y-1 max-h-52 overflow-y-auto pr-1">
             {goals.length === 0 && <p className="text-xs t-muted">No goals yet</p>}
             {goals.map((goal) => {
               const days = getDaysRemaining(goal.target_date)
               return (
-                <div key={goal.id} className="glass-soft px-3 py-2 flex items-center justify-between gap-3">
+                <div key={goal.id} className="glass-soft px-3 py-0.5 flex items-center justify-between gap-3">
                   <span className="text-[13px] font-bold t-accent truncate">{goal.title}</span>
                   <span
                     className={`text-[12px] shrink-0 ${days >= 0 ? 't-muted' : 'text-red-600 dark:text-red-400 font-semibold'}`}

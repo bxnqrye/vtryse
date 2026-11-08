@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import SearchableSelect from "../components/SearchableSelect";
+import AvatarCropper from "../components/AvatarCropper";
 import { COUNTRIES } from "../utils/countries";
 import { ALL_TIMEZONES } from "../utils/timezone";
+import { onEnter } from "../utils/keys";
+
+interface Place {
+  id: number;
+  name: string;
+  admin1?: string;
+  country?: string;
+  latitude: number;
+  longitude: number;
+  timezone?: string;
+}
 
 function Settings() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [theme, setThemeState] = useState("dark");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,6 +37,12 @@ function Settings() {
   const [shareLocation, setShareLocation] = useState(true);
   const [country, setCountry] = useState("");
   const [timezone, setTimezone] = useState("UTC");
+  const [city, setCity] = useState("");
+  const [lat, setLat] = useState<number | null>(null);
+  const [lon, setLon] = useState<number | null>(null);
+  const [cityQuery, setCityQuery] = useState("");
+  const [cityResults, setCityResults] = useState<Place[]>([]);
+  const [citySearching, setCitySearching] = useState(false);
   const [locationMsg, setLocationMsg] = useState("");
 
   useEffect(() => {
@@ -52,6 +71,9 @@ function Settings() {
         setShareLocation(data.share_location !== false);
         setCountry(data.country || "");
         setTimezone(data.timezone || "UTC");
+        setCity(data.city || "");
+        setLat(data.lat ?? null);
+        setLon(data.lon ?? null);
       }
     };
 
@@ -87,22 +109,31 @@ function Settings() {
     if (error) setErrorMsg(error.message);
   };
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* ---------- Profile photo: pick -> reposition -> upload ---------- */
+  const handleAvatarPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
+    setCropSrc(URL.createObjectURL(file));
+  };
 
+  const closeCrop = () => {
+    if (cropSrc) URL.revokeObjectURL(cropSrc);
+    setCropSrc(null);
+  };
+
+  const handleCropSave = async (blob: Blob) => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) return;
 
     setUploading(true);
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${user.id}/avatar.${fileExt}`;
+    const fileName = `${user.id}/avatar.jpg`;
 
     const { error: uploadError } = await supabase.storage
       .from("avatars")
-      .upload(fileName, file, { upsert: true });
+      .upload(fileName, blob, { upsert: true, contentType: "image/jpeg" });
 
     if (uploadError) {
       setErrorMsg(uploadError.message);
@@ -126,6 +157,7 @@ function Settings() {
     else setSuccessMsg("Profile picture updated!");
 
     setUploading(false);
+    closeCrop();
   };
 
   const handleSaveAccount = async () => {
@@ -210,6 +242,37 @@ function Settings() {
     if (error) setErrorMsg(error.message);
   };
 
+  /* ---------- Exact area (city) lookup for weather ---------- */
+  const searchCity = async () => {
+    const q = cityQuery.trim();
+    if (!q) return;
+    setCitySearching(true);
+    setLocationMsg("");
+    const code = COUNTRIES.find((c) => c.name === country)?.code;
+    try {
+      const res = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&language=en&format=json${code ? `&countryCode=${code}` : ""}`,
+      );
+      const json = await res.json();
+      const results: Place[] = json.results ?? [];
+      setCityResults(results);
+      if (results.length === 0) setLocationMsg("No places found. Try another spelling.");
+    } catch {
+      setCityResults([]);
+      setLocationMsg("Could not search right now.");
+    }
+    setCitySearching(false);
+  };
+
+  const choosePlace = (p: Place) => {
+    setCity([p.name, p.admin1].filter(Boolean).join(", "));
+    setLat(p.latitude);
+    setLon(p.longitude);
+    if (p.timezone) setTimezone(p.timezone);
+    setCityResults([]);
+    setCityQuery("");
+  };
+
   const handleSaveLocation = async () => {
     setLocationMsg("");
     const {
@@ -219,7 +282,7 @@ function Settings() {
 
     const { error } = await supabase
       .from("profiles")
-      .update({ country, timezone })
+      .update({ country, timezone, city: city || null, lat, lon })
       .eq("id", user.id);
 
     if (error) setLocationMsg(error.message);
@@ -257,6 +320,10 @@ function Settings() {
 
   return (
     <div className="p-3 sm:p-4 md:p-6 max-w-5xl mx-auto">
+      {cropSrc && (
+        <AvatarCropper key={cropSrc} src={cropSrc} onCancel={closeCrop} onSave={handleCropSave} />
+      )}
+
       <header className="mb-4 sm:mb-5">
         <p className="g-label mb-1">Preferences</p>
         <h1 className="text-[clamp(1.25rem,4vw,1.5rem)] font-semibold t-main">Settings</h1>
@@ -286,14 +353,14 @@ function Settings() {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleAvatarUpload}
+                  onChange={handleAvatarPick}
                   className="hidden"
                   disabled={uploading}
                 />
               </label>
             </div>
 
-            <div className="flex flex-col gap-2 mb-4">
+            <div className="flex flex-col gap-2 mb-4" onKeyDown={onEnter(handleSaveAccount)}>
               <input
                 type="text"
                 placeholder="Name"
@@ -336,9 +403,9 @@ function Settings() {
             </div>
           </div>
 
-          {/* Country & Timezone */}
+          {/* Country, area & timezone */}
           <div className={card}>
-            <p className="g-label mb-4">Country &amp; Timezone</p>
+            <p className="g-label mb-4">Location &amp; Timezone</p>
 
             <div className="flex flex-col gap-2 mb-4">
               <SearchableSelect
@@ -346,11 +413,55 @@ function Settings() {
                 value={country}
                 onChange={(val) => {
                   setCountry(val);
+                  setCity("");
+                  setLat(null);
+                  setLon(null);
+                  setCityResults([]);
                   const match = COUNTRIES.find((c) => c.name === val);
                   if (match) setTimezone(match.timezone);
                 }}
                 placeholder="Search country..."
               />
+
+              <div className="flex gap-2" onKeyDown={onEnter(searchCity)}>
+                <input
+                  type="text"
+                  placeholder="City or area (e.g. Davao City)"
+                  value={cityQuery}
+                  onChange={(e) => setCityQuery(e.target.value)}
+                  className="glass-input flex-1 min-w-0"
+                />
+                <button
+                  onClick={searchCity}
+                  disabled={citySearching}
+                  className="btn btn-ghost btn-sm shrink-0"
+                >
+                  {citySearching ? "..." : "Find"}
+                </button>
+              </div>
+
+              {cityResults.length > 0 && (
+                <ul className="rounded-xl border border-black/10 dark:border-white/15 bg-white/80 dark:bg-white/5 overflow-hidden">
+                  {cityResults.map((p) => (
+                    <li key={p.id}>
+                      <button
+                        type="button"
+                        onClick={() => choosePlace(p)}
+                        className="w-full text-left px-3 py-2 text-xs hover:bg-(--g-hover) transition-colors"
+                      >
+                        {[p.name, p.admin1, p.country].filter(Boolean).join(", ")}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {city && (
+                <p className="text-xs t-muted">
+                  Weather area: <span className="t-accent font-semibold">{city}</span>
+                </p>
+              )}
+
               <SearchableSelect
                 options={ALL_TIMEZONES.map((tz) => ({ value: tz, label: tz }))}
                 value={timezone}
@@ -377,7 +488,7 @@ function Settings() {
           <div className={card}>
             <p className="g-label mb-4">Privacy</p>
 
-            <div className="flex flex-col gap-2 mb-4">
+            <div className="flex flex-col gap-2 mb-4" onKeyDown={onEnter(handleChangePassword)}>
               <input
                 type="password"
                 placeholder="New password"
@@ -446,7 +557,7 @@ function Settings() {
                   Accept Sharing
                 </button>
                 {showAcceptInput && (
-                  <div className="mt-3 flex gap-2">
+                  <div className="mt-3 flex gap-2" onKeyDown={onEnter(handleAcceptSharing)}>
                     <input
                       type="text"
                       placeholder="Enter code"

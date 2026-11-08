@@ -4,12 +4,10 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
+import SpotifyCallback from './pages/SpotifyCallback'
 import ProtectedRoute from './components/ProtectedRoute'
 import Sidebar from './components/Sidebar'
 import { useTheme } from './hooks/useTheme'
-import SpotifyCallback from './pages/SpotifyCallback'
-
-<Route path="/spotify-callback" element={<ProtectedRoute><SpotifyCallback /></ProtectedRoute>} />
 
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
@@ -81,6 +79,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/spotify-callback"
+            element={
+              <ProtectedRoute>
+                <SpotifyCallback />
               </ProtectedRoute>
             }
           />
