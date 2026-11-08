@@ -39,24 +39,24 @@ function SearchableSelect({ options, value, onChange, placeholder = 'Search...' 
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-31.5 text-center bg-surface border border-border-subtle p-2.5 rounded-xl text-text-primary text-[11px] transition-colors"
+        className="w-full text-left truncate rounded-[0.65rem] px-3 py-2 text-[0.8rem] border border-black/15 dark:border-white/15 bg-white/70 dark:bg-white/10 text-black dark:text-white hover:bg-(--g-hover) transition-colors"
       >
         {selectedLabel}
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full bg-surface border border-border-subtle rounded-lg shadow-xl max-h-64 overflow-hidden flex flex-col">
+        <div className="absolute z-50 mt-1 w-full min-w-56 max-h-64 overflow-hidden flex flex-col rounded-xl border border-black/10 dark:border-white/15 bg-white dark:bg-[#1f1a1a] text-black dark:text-white shadow-xl">
           <input
             autoFocus
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={placeholder}
-            className="p-2.5 bg-void border-b border-border-subtle text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
+            className="px-3 py-2 text-[0.8rem] bg-transparent border-b border-black/10 dark:border-white/15 text-black dark:text-white placeholder:text-black/40 dark:placeholder:text-white/40 focus:outline-none"
           />
           <div className="overflow-y-auto">
             {filtered.length === 0 && (
-              <p className="text-xs text-text-muted p-3">No results</p>
+              <p className="text-xs opacity-60 p-3">No results</p>
             )}
             {filtered.map((o) => (
               <button
@@ -67,10 +67,8 @@ function SearchableSelect({ options, value, onChange, placeholder = 'Search...' 
                   setOpen(false)
                   setQuery('')
                 }}
-                className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                  o.value === value
-                    ? 'bg-trace/20 text-trace'
-                    : 'text-text-primary hover:bg-surface-hover'
+                className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+                  o.value === value ? 'bg-(--g-accent) text-white' : 'hover:bg-(--g-hover)'
                 }`}
               >
                 {o.label}

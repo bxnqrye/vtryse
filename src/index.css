@@ -43,6 +43,7 @@ body {
 .font-fuzzy   { font-family: 'Fuzzy Bubbles', cursive; }
 .font-rammetto { font-family: 'Rammetto One', cursive; }
 .font-titan   { font-family: 'Titan One', cursive; }
+.font-gothic { font-family: 'Gothic A1', sans-serif;}
 
 .home-fixed {
   --color-void: #000000;
@@ -318,3 +319,27 @@ html:has(.app-shell) { font-size: 17px; }
   }
   .g-file::file-selector-button:hover { background: var(--g-hover); }
 }
+
+@keyframes link-flow { to { background-position: -200% 0; } }
+.together-link {
+  position: relative;
+  display: block;
+  width: 2.2rem;
+  height: 2px;
+  margin: 0 -2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--h-pink), transparent 50%, var(--h-pink));
+  background-size: 200% 100%;
+  box-shadow: 0 0 8px var(--h-glow);
+  animation: link-flow 2.4s linear infinite;
+}
+.together-link::after {
+  content: '♥';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -55%);
+  font-size: 0.7rem;
+  color: var(--h-pink);
+}
+@media (prefers-reduced-motion: reduce) { .together-link { animation: none; } }

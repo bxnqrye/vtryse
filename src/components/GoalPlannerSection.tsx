@@ -168,9 +168,9 @@ function GoalPlannerSection() {
 
   return (
     <div>
-      <h2 className="g-label text-sm mb-4">Goal Planner</h2>
+      <h2 className="font-fuzzy g-label text-[17px] mb-4">Goal Planner</h2>
 
-      <div className="glass-soft p-3 flex flex-col gap-2 mb-5">
+      <div className="glass-soft p-3 flex flex-col gap-2 mb-3">
         {editingId && (
           <p className="text-[11px] t-muted">Editing - Save to update, or Cancel below</p>
         )}
@@ -223,7 +223,7 @@ function GoalPlannerSection() {
                   </div>
                 )}
               </div>
-              <p className="text-[13px] mt-1">
+              <p className="font-bold text-[14px]">
                 Target: {goal.target_date} —{' '}
                 <span className={daysLeft >= 0 ? '' : 'text-red-600 dark:text-red-400 font-semibold'}>
                   {daysLeft >= 0 ? `${daysLeft} days left` : 'Overdue'}

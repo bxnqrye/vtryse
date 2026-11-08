@@ -97,12 +97,12 @@ function Notifications() {
 
   return (
     <div className="flex-1 overflow-y-auto min-h-0">
-      <p className="g-label text-xs hover:bg-(--g-hover) rounded font-semibold text-center bg-[#6d5758]/20 px-1 mb-2">R E M I N D E R S</p>
+      <p className="text-[13px] hover:bg-(--g-hover) rounded font-semibold text-center bg-[#6d5758]/20 px-1 mb-2">R E M I N D E R S</p>
 
       {visibleReminders.length === 0 ? (
-        <p className="text-xs t-muted px-1">Nothing due soon</p>
+        <p className="text-[13px] t-muted px-1">Nothing due soon</p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="font-gaeru font-bold flex flex-col gap-2">
           {visibleReminders.map((reminder) => {
             const isExpanded = expandedId === reminder.id
             const titleColor = TYPE_COLORS[reminder.type] || '#8b7cf6'
@@ -131,12 +131,12 @@ function Notifications() {
                         isExpanded ? 'max-h-64 opacity-100 mt-1' : 'max-h-0 opacity-0'
                       }`}
                     >
-                      <p className="text-[10px] font-bold t-muted">
+                      <p className="text-[12px] font-bold t-muted">
                         {reminder.event_date}
                         {reminder.event_time && ` at ${reminder.event_time}`}
                       </p>
                       {reminder.description && (
-                        <p className="text-[11px] t-main mt-1 whitespace-pre-wrap break-words">
+                        <p className="text-[11px] t-accent font-fuzzy mt-1 whitespace-pre-wrap break-words">
                           {reminder.description}
                         </p>
                       )}

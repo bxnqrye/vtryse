@@ -7,6 +7,9 @@ import Settings from './pages/Settings'
 import ProtectedRoute from './components/ProtectedRoute'
 import Sidebar from './components/Sidebar'
 import { useTheme } from './hooks/useTheme'
+import SpotifyCallback from './pages/SpotifyCallback'
+
+<Route path="/spotify-callback" element={<ProtectedRoute><SpotifyCallback /></ProtectedRoute>} />
 
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()

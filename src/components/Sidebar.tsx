@@ -66,15 +66,17 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
       {/* Overlay when mobile menu is open */}
       {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setIsOpen(false)}
-        />
+          <div className="md:hidden fixed top-3 left-3 right-3 h-13 rounded-2xl flex items-center justify-between px-4 z-[60] bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl border border-black/10 dark:border-white/10">
+            <h1 className="text-lg font-bold tracking-wide t-accent">vtryse</h1>
+            <button onClick={() => setIsOpen(!isOpen)} className="t-main text-2xl leading-none">
+              {isOpen ? "✕" : "☰"}
+            </button>
+          </div>
       )}
 
       {/* Sidebar */}
       <aside
-        className={`w-56 fixed left-0 top-0 bottom-0 z-50 rounded-l-none rounded-r-3xl border border-l-0 border-black/10 dark:border-white/10 bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(217,96,122,0.15)] dark:shadow-[0_0_40px_rgba(232,137,154,0.12)] flex flex-col p-4 transition-transform duration-200
+        className={`w-56 fixed left-0 top-0 bottom-0 z-50 rounded-l-none rounded-r-3xl border border-l-0 border-black/10 dark:border-white/10 bg-white/100 dark:bg-[#1f1a1a]/100 backdrop-blur-xl shadow-[0_0_30px_rgba(217,96,122,0.15)] dark:shadow-[0_0_40px_rgba(232,137,154,0.12)] flex flex-col p-4 transition-transform duration-200
         ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} ${collapsed ? "md:-translate-x-[120%]" : "md:translate-x-0"}`}
       >
         {/* Desktop hide button */}
@@ -87,7 +89,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
         </button>
 
         <div className="mb-3 px-2 hidden md:block">
-          <h1 className="font-titan text-[25px] tracking-wide">vtryse</h1>
+          <h1 className="t-accent font-titan text-[25px] tracking-wide">vtryse</h1>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
@@ -133,7 +135,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
         <Notifications />
 
-        <button onClick={handleLogout} className="btn btn-ghost mt-3">
+        <button onClick={handleLogout} className="font-bold t-accent btn btn-ghost mt-3">
           Log Out
         </button>
       </aside>

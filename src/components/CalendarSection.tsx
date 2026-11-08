@@ -297,19 +297,19 @@ function CalendarSection() {
 
   return (
     <div>
-      <h2 className="text-center g-label text-sm mb-0">Calendar</h2>
+      <h2 className="text-[17px] font-fuzzy text-center g-label text-sm mt-2">Calendar</h2>
 
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => setCurrentMonth(new Date(year, month - 1, 1))} className="btn btn-ghost btn-sm !px-3">‹</button>
-        <p className="text-[#3f8a52] text-base font-semibold mb-3">{monthLabel}</p>
+        <p className="text-base font-semibold mb-3">{monthLabel}</p>
         <button onClick={() => setCurrentMonth(new Date(year, month + 1, 1))} className="btn btn-ghost btn-sm !px-3">›</button>
       </div>
 
-      <div className="grid grid-cols-7 text-[#3f8a52] text-center text-[10px] font-bold t-muted mb-1.5">
+      <div className="grid grid-cols-7 text-center text-[13px] font-bold t-muted">
         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i}>{d}</div>)}
       </div>
 
-      <div className="text-center glass p-2 sm:p-5 grid grid-cols-7 gap-1 sm:gap-1.5 mb-6">
+      <div className="text-center p-2 sm:p-3 grid grid-cols-7 gap-1 sm:gap-1.5 mb-6">
         {cells.map((date, i) => {
           const dayEvents = date ? eventsForDate(date) : []
           return (
@@ -322,7 +322,7 @@ function CalendarSection() {
                   setShowForm(false)
                 }
               }}
-              className={`min-h-12 sm:min-h-16 rounded-lg text-[10px] p-1 relative
+              className={`min-h-12 sm:min-h-16 rounded-lg text-[12px] p-1 relative
                 ${date ? 'g-cell cursor-pointer' : ''}
                 ${selectedDate === date ? 'g-cell-selected' : ''}`}
             >
@@ -437,7 +437,7 @@ function CalendarSection() {
 
           <button
             onClick={() => setShowForm(true)}
-            className="w-full text-left font-semibold text-[11px] tracking-widest t-accent hover:opacity-80 flex items-center mb-2"
+            className="w-full text-left font-semibold text-[13px] tracking-widest t-accent hover:opacity-80 flex items-center mb-2"
           >
             + ADD NEW
           </button>
