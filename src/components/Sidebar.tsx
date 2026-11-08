@@ -3,12 +3,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Notifications from "./Notifications";
 
-const inverted =
-  // light theme -> dark sidebar
-  "bg-[#1f1a1a]/85 border-white/10 [--g-text:#ffffff] [--g-muted:#a29b9d] [--g-accent-text:#e58a9b] [--g-hover:rgba(232,137,154,0.14)] [--g-border:rgba(255,255,255,0.1)] [--g-input:rgba(255,255,255,0.07)] " +
-  // dark theme -> light sidebar
-  "dark:bg-white/75 dark:border-black/10 dark:[--g-text:#2a1d1f] dark:[--g-muted:#6f6668] dark:[--g-accent-text:#d9607a] dark:[--g-hover:rgba(232,137,154,0.18)] dark:[--g-border:rgba(217,96,122,0.25)] dark:[--g-input:rgba(255,255,255,0.6)]";
-
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const navigate = useNavigate();
   const location = useLocation();
