@@ -24,19 +24,27 @@ function Login() {
   }, [])
 
   const handleSignUp = async () => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          name,
-          username,
-        },
+        emailRedirectTo: `${window.location.origin}/login?type=signup`,
+        data: { name, username },
       },
     })
 
     if (error) {
       setErrorMsg(error.message)
+      return
+    }
+
+    if (data.user && data.user.identities?.length === 0) {
+      setErrorMsg('This email is already registered. Try logging in.')
+      return
+    }
+
+    if (data.session) {
+      navigate('/dashboard')
       return
     }
 

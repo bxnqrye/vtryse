@@ -3,6 +3,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Notifications from "./Notifications";
 
+const inverted =
+  // light theme -> dark sidebar
+  "bg-[#1f1a1a]/85 border-white/10 [--g-text:#ffffff] [--g-muted:#a29b9d] [--g-accent-text:#e58a9b] [--g-hover:rgba(232,137,154,0.14)] [--g-border:rgba(255,255,255,0.1)] [--g-input:rgba(255,255,255,0.07)] " +
+  // dark theme -> light sidebar
+  "dark:bg-white/75 dark:border-black/10 dark:[--g-text:#2a1d1f] dark:[--g-muted:#6f6668] dark:[--g-accent-text:#d9607a] dark:[--g-hover:rgba(232,137,154,0.18)] dark:[--g-border:rgba(217,96,122,0.25)] dark:[--g-input:rgba(255,255,255,0.6)]";
+
 function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,7 +60,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
       )}
 
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-3 left-3 right-3 h-13 glass rounded-2xl flex items-center justify-between px-4 z-[60]">
+      <div className={`bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl border border-black/10 dark:border-white/10`}>
         <h1 className="t-accent text-lg font-bold tracking-wide t-main">vtryse</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -74,7 +80,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
       {/* Sidebar */}
       <aside
-        className={`w-56 fixed left-0 top-0 bottom-0 z-50 glass rounded-l-none rounded-r-3xl border-l-0 flex flex-col p-4 transition-transform duration-200 bg-[#6d5758]/20
+        className={`w-56 fixed left-0 top-0 bottom-0 z-50 rounded-l-none rounded-r-3xl border border-l-0 border-black/10 dark:border-white/10 bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(217,96,122,0.15)] dark:shadow-[0_0_40px_rgba(232,137,154,0.12)] flex flex-col p-4 transition-transform duration-200
         ${isOpen ? "translate-x-0" : "-translate-x-[120%]"} ${collapsed ? "md:-translate-x-[120%]" : "md:translate-x-0"}`}
       >
         {/* Desktop hide button */}
@@ -86,31 +92,30 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
           ‹
         </button>
 
-        <div className="mb-5 px-2 hidden md:block">
-          <h1 className="t-accent font-titan text-[30px] tracking-wide">vtryse</h1>
-          <p className="text-[12px] font-fuzzy font-bold tracking-wide ml-1">Trace it. </p>
+        <div className="mb-3 px-2 hidden md:block">
+          <h1 className="font-titan text-[25px] tracking-wide">vtryse</h1>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
         {/* Pfp + name + username */}
-        <div className="glass-soft flex items-center gap-3.5 p-4.5 mb-6">
+        <div className="glass-soft flex items-center gap-2 p-2 mb-3">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt="Profile"
-              className="w-9 h-9 rounded-full object-cover border border-white/20 shrink-0"
+              className="w-8 h-8 rounded-full object-cover border border-white/20 shrink-0"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-(--g-accent) flex items-center justify-center text-white text-xs font-semibold shrink-0">
+            <div className="w-8 h-8 rounded-full bg-(--g-accent) flex items-center justify-center text-white font-semibold shrink-0">
               {name ? name.charAt(0).toUpperCase() : "?"}
             </div>
           )}
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm font-semibold t-main truncate">
+          <div className="flex flex-col min-w-0 leading-tight">
+            <span className="text-[17px] font-semibold t-main truncate">
               {name || "User"}
             </span>
             {username && (
-              <span className="text-xs t-muted truncate">{username}</span>
+              <span className="text-[12px] t-muted truncate">{username}</span>
             )}
           </div>
         </div>
