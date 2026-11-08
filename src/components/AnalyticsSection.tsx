@@ -23,8 +23,8 @@ interface Goal {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  ongoing: '#C49D8B',
-  completed: '#3f8a52',
+  ongoing: '#DE9E9E',
+  completed: '#77BA68',
   cancelled: '#a33a3a',
 }
 

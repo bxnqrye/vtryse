@@ -123,11 +123,11 @@ function TogetherWidget() {
 
       {start ? (
         <>
-          <p className="text-sm t-muted">{note}</p>
-          <p className="text-3xl font-bold leading-tight text-(--h-pink) [text-shadow:0_0_18px_var(--h-glow)]">
+          <p className="text-[14px] t-muted">{note}</p>
+          <p className="text-2xl font-bold leading-tight text-(--h-pink) [text-shadow:0_0_18px_var(--h-glow)]">
             {days} {days === 1 ? 'day' : 'days'}
           </p>
-          <p className="text-lg font-semibold">{hours.toLocaleString()} hours</p>
+          <p className="text-[15px] font-semibold">{hours.toLocaleString()} hours</p>
         </>
       ) : (
         <button onClick={openEditor} className="btn btn-primary mt-1">
