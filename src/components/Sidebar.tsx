@@ -55,7 +55,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-3 left-3 right-3 h-13 glass rounded-2xl flex items-center justify-between px-4 z-[60]">
-        <h1 className="text-lg font-bold tracking-wide t-main">vtryse</h1>
+        <h1 className="t-accent text-lg font-bold tracking-wide t-main">vtryse</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="t-main text-2xl leading-none"
@@ -86,9 +86,9 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
           ‹
         </button>
 
-        <div className="mb-6 px-2 hidden md:block">
-          <h1 className="text-2xl text-trace font-bold tracking-wide">vtryse</h1>
-          <p className="text-[#3f8a52] text-[11px] t-accent font-bold tracking-wide">Trace Your Progress</p>
+        <div className="mb-5 px-2 hidden md:block">
+          <h1 className="t-accent font-titan text-[30px] tracking-wide">vtryse</h1>
+          <p className="text-[12px] font-fuzzy font-bold tracking-wide ml-1">Trace it. </p>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
