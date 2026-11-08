@@ -100,7 +100,7 @@ function SpotifySection() {
       </div>
 
       {!spotifyConfigured && (
-        <p className="text-sm t-muted">Add VITE_SPOTIFY_CLIENT_ID to your .env file to enable Spotify.</p>
+        <p className="text-sm t-muted">Connect to Spotify to enable listening activity.</p>
       )}
 
       {spotifyConfigured && activity && !activity.connected && (
