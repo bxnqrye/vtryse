@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
 import ConfirmDialog from './ConfirmDialog'
+import { onEnter } from '../utils/keys'
 
 interface Goal {
   id: string
@@ -168,11 +169,13 @@ function GoalPlannerSection() {
 
   return (
     <div className="h-[590px] min-h-0 flex flex-col overflow-hidden">
-      <h2 className="font-fuzzy g-label text-[17px] mb-4 shrink-0">
-        Goal Planner
-      </h2>
 
-      <div className="glass-soft p-3 flex flex-col gap-2 mb-3 shrink-0">
+      onKeyDown:
+      <div
+        className="glass-soft p-3 flex flex-col gap-2 mb-3 shrink-0"
+        onKeyDown={onEnter(handleAddGoal)}
+      >
+        
         {editingId && (
           <p className="text-[11px] t-muted">Editing - Save to update, or Cancel below</p>
         )}
@@ -243,6 +246,9 @@ function GoalPlannerSection() {
                   onChange={(e) =>
                     setNoteInputs({ ...noteInputs, [goal.id]: e.target.value })
                   }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleAddUpdate(goal.id)
+                  }}
                   className="glass-input"
                 />
                 <button onClick={() => handleAddUpdate(goal.id)} className="btn btn-ghost btn-sm shrink-0">
