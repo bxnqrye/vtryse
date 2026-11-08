@@ -72,7 +72,7 @@ function Equalizer() {
 
 const ERRORS: Record<string, string> = {
   forbidden:
-    "Spotify blocked this account. Add your Spotify email under User Management in your Spotify developer dashboard (limit: 5 people).",
+    "Your Spotify account isn't on this app's allowed list yet. Send your Spotify email to the vtryse owner, then press Disconnect and Connect again.",
   rate: 'Spotify is busy right now. Retrying shortly.',
   auth: 'Your Spotify session expired. Reconnect below.',
   network: 'Could not reach Spotify. Retrying shortly.',
@@ -175,7 +175,7 @@ function SpotifySection() {
         <p className="text-sm text-red-600 dark:text-red-400 mb-3">
           {ERRORS[activity.error]}{' '}
 
-          {activity.error === 'auth' && (
+          {(activity.error === 'auth' || activity.error === 'forbidden') && (
             <button
               onClick={startSpotifyLogin}
               className="underline"

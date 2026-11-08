@@ -293,7 +293,7 @@ function AnalyticsSection() {
         {/* Goal deadlines */}
         <div className="min-w-0">
           <p className="text-sm font-semibold mb-0 lg:h-[30px] flex items-center">Goal Deadlines</p>
-          <div className="space-y-1 max-h-52 overflow-y-auto pr-1">
+          <div className="space-y-1 max-h-52 soft-scroll pr-1">
             {goals.length === 0 && <p className="text-xs t-muted">No goals yet</p>}
             {goals.map((goal) => {
               const days = getDaysRemaining(goal.target_date)

@@ -223,7 +223,7 @@ function TogetherWidget() {
         </div>
       )}
 
-      <div className="space-y-3 flex-1 min-h-0 overflow-y-auto">
+      <div className="space-y-4 max-h-64 soft-scroll pr-1">
         {counters.map((c) => {
           const diff = Math.max(0, now - new Date(c.start_at).getTime())
           const days = Math.floor(diff / 86400000)
