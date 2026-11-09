@@ -169,14 +169,14 @@ function GoalPlannerSection() {
 
   return (
     <div className="h-[590px] min-h-0 flex flex-col overflow-hidden">
-      <h2 className="text-[17px] font-fuzzy text-center g-label text-sm mt-2 mb-4">Calendar</h2>
+      <h2 className="text-[17px] font-fuzzy text-center g-label text-sm mt-2 mb-4">Goal Planner</h2>
       <div
         className="glass-soft p-3 flex flex-col gap-2 mb-3 shrink-0"
         onKeyDown={onEnter(handleAddGoal)}
       >
         
         {editingId && (
-          <p className="text-[11px] t-muted">Editing - Save to update, or Cancel below</p>
+          <p className="text-[13px] ml-3 t-muted">Editing - Save to update, or Cancel below</p>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <input

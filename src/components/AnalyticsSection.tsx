@@ -301,7 +301,7 @@ function AnalyticsSection() {
                 <div key={goal.id} className="glass-soft px-3 py-0.5 flex items-center justify-between gap-3">
                   <span className="text-[13px] font-bold t-accent truncate">{goal.title}</span>
                   <span
-                    className={`text-[12px] shrink-0 ${days >= 0 ? 't-muted' : 'text-red-600 dark:text-red-400 font-semibold'}`}
+                    className={`text-[12px] shrink-0 ${days >= 0 ? 't-display' : 'text-red-600 dark:text-red-400 font-semibold'}`}
                   >
                     {days >= 0 ? `${days} days remaining` : 'Overdue'}
                   </span>

@@ -51,7 +51,7 @@ function Equalizer() {
 
 const ERRORS: Record<string, string> = {
   forbidden:
-    "Your Spotify account isn't on this app's allowed list. Use Last.fm below instead, or ask the owner to add your Spotify email.",
+    "Your Spotify account isn't on this app's allowed list. Use Last.fm to connect your Spotify listening activities in this dashboard.",
   rate: 'Too many requests right now. Retrying shortly.',
   auth: 'Your Spotify session expired. Reconnect below.',
   network: 'Could not reach the music service. Retrying shortly.',
@@ -130,14 +130,14 @@ function SpotifySection() {
 
       {!spotifyConfigured && !lastfmConfigured && (
         <p className="text-sm t-muted">
-          Add VITE_SPOTIFY_CLIENT_ID or VITE_LASTFM_API_KEY to enable listening activity.
+          No Spotify or Last.fm connection configured.
         </p>
       )}
 
       {(spotifyConfigured || lastfmConfigured) && activity && !activity.connected && (
-        <div className="glass-soft p-4 space-y-3">
+        <div className="glass-soft p-4">
           {spotifyConfigured && (
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between">
               <p className="text-sm t-muted">Connect Spotify to show your listening activity.</p>
               <button onClick={startSpotifyLogin} className="btn btn-primary">
                 Connect Spotify
@@ -147,7 +147,7 @@ function SpotifySection() {
 
           {lastfmConfigured && (
             <div>
-              <p className="text-sm t-muted mb-2">
+              <p className="text-sm t-muted mb-4">
                 {spotifyConfigured ? 'Or use ' : 'Use '}Last.fm (works for anyone who scrobbles Spotify):
               </p>
               <div className="flex gap-2" onKeyDown={onEnter(handleLastfmSave)}>
@@ -168,7 +168,7 @@ function SpotifySection() {
       )}
 
       {activity?.error && (
-        <p className="text-sm text-red-600 dark:text-red-400 mb-3">
+        <p className="text-sm text-red-600 dark:text-red-400 ml-3 mt-4">
           {ERRORS[activity.error]}{' '}
           {activity.error === 'auth' && (
             <button onClick={startSpotifyLogin} className="underline">
@@ -237,7 +237,7 @@ function SpotifySection() {
 
             {friends.length === 0 ? (
               <p className="text-xs t-muted">
-                Nobody sharing yet, or they haven't connected Spotify or Last.fm.
+                Nobody is sharing yet, or they haven't connected Last.fm.
               </p>
             ) : (
               <ul className="space-y-2">
