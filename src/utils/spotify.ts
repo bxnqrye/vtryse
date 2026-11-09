@@ -21,7 +21,8 @@ export interface SpotifyActivity {
   isPlaying: boolean
   track: SpotifyTrack | null
   recent: SpotifyTrack[]
-  error?: 'forbidden' | 'rate' | 'auth' | 'network'
+  error?: 'forbidden' | 'rate' | 'auth' | 'network' | 'lastfm_user' | 'lastfm_private'
+  source?: 'spotify' | 'lastfm'
 }
 
 export interface FriendActivity {
@@ -175,7 +176,7 @@ function normalize(raw: RawTrack | null | undefined, playedAt?: string): Spotify
 }
 
 export async function fetchSpotifyActivity(): Promise<SpotifyActivity> {
-  const empty: SpotifyActivity = { connected: false, isPlaying: false, track: null, recent: [] }
+  const empty: SpotifyActivity = { connected: false, isPlaying: false, track: null, recent: [], source: 'spotify' }
   const token = await getAccessToken()
   if (!token) return empty
 
@@ -259,4 +260,89 @@ export async function disconnectSpotify() {
   if (!user) return
   await supabase.from('spotify_connections').delete().eq('user_id', user.id)
   await supabase.from('spotify_activity').delete().eq('user_id', user.id)
+}
+
+/* ---------- Last.fm (no approval or user limit) ---------- */
+const LASTFM_KEY = import.meta.env.VITE_LASTFM_API_KEY as string | undefined
+export const lastfmConfigured = Boolean(LASTFM_KEY)
+const LF_PLACEHOLDER = '2a96cbd8b46e442fc41c2b86b821562f' // Last.fm's grey "no cover" star
+
+interface LfTrack {
+  name: string
+  url: string
+  artist: { '#text': string }
+  album?: { '#text': string }
+  image?: { '#text': string; size: string }[]
+  date?: { uts: string }
+  '@attr'?: { nowplaying?: string }
+}
+
+function lfTrack(t: LfTrack): SpotifyTrack {
+  const img =
+    t.image?.find((i) => i.size === 'extralarge')?.['#text'] ||
+    t.image?.[t.image.length - 1]?.['#text'] ||
+    ''
+  return {
+    id: `${t.artist['#text']}-${t.name}`,
+    name: t.name,
+    artists: t.artist['#text'],
+    album: t.album?.['#text'] ?? '',
+    image: img && !img.includes(LF_PLACEHOLDER) ? img : null,
+    url: t.url,
+    playedAt: t.date?.uts ? new Date(Number(t.date.uts) * 1000).toISOString() : undefined,
+  }
+}
+
+export async function fetchLastfmActivity(username: string): Promise<SpotifyActivity> {
+  const base: SpotifyActivity = {
+    connected: true,
+    isPlaying: false,
+    track: null,
+    recent: [],
+    source: 'lastfm',
+  }
+  if (!LASTFM_KEY) return { ...base, connected: false }
+
+  try {
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(username)}&api_key=${LASTFM_KEY}&format=json&limit=6`
+    )
+    const json = await res.json()
+    if (json.error) {
+      const error = json.error === 6 ? 'lastfm_user' : json.error === 17 ? 'lastfm_private' : json.error === 29 ? 'rate' : 'network'
+      return { ...base, error }
+    }
+    const items = (json.recenttracks?.track ?? []) as LfTrack[]
+    const playing = items.find((t) => t['@attr']?.nowplaying === 'true')
+    const recent = items
+      .filter((t) => t['@attr']?.nowplaying !== 'true')
+      .slice(0, 5)
+      .map(lfTrack)
+    return { ...base, isPlaying: Boolean(playing), track: playing ? lfTrack(playing) : null, recent }
+  } catch {
+    return { ...base, error: 'network' }
+  }
+}
+
+export async function getMyLastfmUsername(): Promise<string | null> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+  const { data } = await supabase
+    .from('profiles')
+    .select('lastfm_username')
+    .eq('id', user.id)
+    .maybeSingle()
+  return data?.lastfm_username ?? null
+}
+
+export async function saveLastfmUsername(name: string | null) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('profiles').update({ lastfm_username: name }).eq('id', user.id)
+}
+
+export async function disconnectLastfm() {
+  await saveLastfmUsername(null)
+  const { data: { user } } = await supabase.auth.getUser()
+  if (user) await supabase.from('spotify_activity').delete().eq('user_id', user.id)
 }
