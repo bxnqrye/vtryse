@@ -73,7 +73,7 @@ function Login() {
           to="/"
           className="font-cherry block text-center font-display text-5xl mb-2 text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
         >
-          vtryse
+          VTRyse
         </Link>
 
         <h2 className="text-2xl font-bold mb-4 text-center">

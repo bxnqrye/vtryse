@@ -55,7 +55,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
 
       {/* Mobile top bar */}
       <div className={`bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl border border-black/10 dark:border-white/10`}>
-        <h1 className="t-accent text-lg font-bold tracking-wide t-main">vtryse</h1>
+        <h1 className="t-accent text-lg font-bold tracking-wide t-main">VTRyse</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="t-main text-2xl leading-none"
@@ -67,7 +67,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
       {/* Overlay when mobile menu is open */}
       {isOpen && (
           <div className="md:hidden fixed top-3 left-3 right-3 h-13 rounded-2xl flex items-center justify-between px-4 z-[60] bg-white/70 dark:bg-[#1f1a1a]/80 backdrop-blur-xl border border-black/10 dark:border-white/10">
-            <h1 className="text-lg font-bold tracking-wide t-accent">vtryse</h1>
+            <h1 className="text-lg font-bold tracking-wide t-accent">VTRyse</h1>
             <button onClick={() => setIsOpen(!isOpen)} className="t-main text-2xl leading-none">
               {isOpen ? "✕" : "☰"}
             </button>
@@ -89,7 +89,7 @@ function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => 
         </button>
 
         <div className="mb-3 px-2 hidden md:block">
-          <h1 className="t-accent font-titan text-[25px] tracking-wide">vtryse</h1>
+          <h1 className="t-accent font-titan text-[25px] tracking-wide">VTRyse</h1>
         </div>
         <div className="mb-4 md:hidden h-12" />
 
