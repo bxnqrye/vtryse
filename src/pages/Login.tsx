@@ -71,12 +71,12 @@ function Login() {
       <div className="relative w-full max-w-sm p-8 bg-(--h-card) backdrop-blur-xl border border-(--h-card-border) rounded-3xl shadow-[0_0_60px_var(--h-glow)]">
         <Link
           to="/"
-          className="font-cherry block text-center font-display text-5xl mb-2 text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
+          className="font-titan block text-center font-display text-3xl text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
         >
           VTRyse
         </Link>
 
-        <h2 className="text-2xl font-bold mb-4 text-center">
+        <h2 className="text-[20px] font-bold mb-4 text-center">
           {isSignup ? 'Create your account' : 'Hello again : )'}
         </h2>
 
@@ -124,7 +124,7 @@ function Login() {
 
         {errorMsg && <p className="mt-3 text-base text-center text-(--h-pink)">{errorMsg}</p>}
 
-        <p className="mt-5 text-lg text-center opacity-80">
+        <p className="mt-4 text-[17px] text-center opacity-80">
           {isSignup ? (
             <>
               Already have an account?{' '}

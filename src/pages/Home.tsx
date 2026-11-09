@@ -227,10 +227,10 @@ function Home() {
             alt="vtryse logo"
             className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
-          <h1 className="font-titan relative font-display tracking-tight text-[70px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
+          <h1 className="font-titan relative tracking-tight text-[55px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             VTRryse
           </h1>
-          <p className="font-fuzzy relative mt-7 opacity-70 text-lg leading-snug max-w-[90vw]">
+          <p className="font-fuzzy relative mt-4 opacity-70 text-lg leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
             <Wave text="See how far you've come." start={38} />
           </p>

@@ -100,7 +100,7 @@ function Notifications() {
       <p className="text-[13px] hover:bg-(--g-hover) rounded font-semibold text-center px-1 mb-2">R E M I N D E R S</p>
 
       {visibleReminders.length === 0 ? (
-        <p className="text-[13px] t-muted px-1">Nothing due soon</p>
+        <p className="text-center text-[13px] t-muted px-1">Nothing due soon</p>
       ) : (
         <div className="font-gaeru font-bold flex flex-col gap-2">
           {visibleReminders.map((reminder) => {
