@@ -253,7 +253,7 @@ function TogetherWidget() {
         })}
       </div>
 
-      <button onClick={openNew} className="font-bold btn btn-ghost btn-sm mt-3 shrink-0">
+      <button onClick={openNew} className="font-bold btn btn-ghost btn-sm shrink-0">
         + {counters.length === 0 ? 'Start a counter' : 'Add another'}
       </button>
 

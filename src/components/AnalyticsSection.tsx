@@ -23,9 +23,9 @@ interface Goal {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  ongoing: '#DE9E9E',
-  completed: '#77BA68',
-  cancelled: '#a33a3a',
+  ongoing: '#000000',
+  completed: '#E8899A',
+  cancelled: '#474242',
 }
 
 const TYPE_COLORS: Record<string, string> = {
@@ -143,7 +143,7 @@ function AnalyticsSection() {
         {/* Status chart */}
         <div className="min-w-0">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold">Status</p>
+            <p className="ml-4 text-sm font-semibold">Status</p>
             <div className="flex gap-1.5">
               <button
                 onClick={() => setChartType('bar')}
