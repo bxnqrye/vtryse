@@ -168,7 +168,7 @@ function GoalPlannerSection() {
   }
 
   return (
-    <div className="h-[590px] min-h-0 flex flex-col overflow-hidden">
+    <div className="h-full min-h-0 flex flex-col overflow-hidden">
       <h2 className="text-[17px] font-fuzzy text-center g-label text-sm mt-2 mb-4">Goal Planner</h2>
       <div
         className="glass-soft p-3 flex flex-col gap-2 mb-3 shrink-0"

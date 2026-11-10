@@ -1,0 +1,81 @@
+/* Animated feature visuals: still when idle, moving while the box is hovered / clicked (.fx-on) */
+.fx *, .fx *::before, .fx *::after { animation-play-state: paused !important; }
+.fx.fx-on *, .fx.fx-on *::before, .fx.fx-on *::after { animation-play-state: running !important; }
+
+.fx { font-size: clamp(1rem, 2.4vw, 1.9rem); }
+.fx-box { position: absolute; inset: 0; padding: 14%; display: flex; align-items: center; justify-content: center; }
+
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+@keyframes fx-grow { from { transform: scaleY(1); } to { transform: scaleY(0.3); } }
+
+/* Personal Dashboard */
+.fx-dash { position: relative; display: flex; align-items: flex-end; gap: 9%; width: 100%; height: 100%; }
+.fx-dash i { flex: 1; height: var(--h); border-radius: 8px 8px 3px 3px; transform-origin: bottom;
+  background: linear-gradient(to top, var(--h-pink), color-mix(in srgb, var(--h-pink) 30%, transparent));
+  animation: fx-grow 1.8s ease-in-out infinite alternate; animation-delay: calc(var(--i) * 0.25s); }
+.fx-dash b { position: absolute; top: -8%; right: -4%; width: 30%; aspect-ratio: 1; border-radius: 50%;
+  border: 3px solid var(--h-pink); border-top-color: transparent; animation: fx-spin 3s linear infinite; }
+
+/* Task Tracker */
+.fx-tasks { display: flex; flex-direction: column; gap: 14%; width: 100%; }
+.fx-tasks div { display: flex; align-items: center; gap: 10%; }
+.fx-tasks span { position: relative; width: 22%; aspect-ratio: 1; border-radius: 6px; border: 2px solid var(--h-pink);
+  animation: fx-box 3.6s ease-in-out infinite; animation-delay: var(--d); }
+.fx-tasks span::after { content: '✓'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.8em; color: #fff;
+  animation: fx-tick 3.6s ease-in-out infinite; animation-delay: var(--d); }
+.fx-tasks em { flex: 1; height: 7px; border-radius: 4px; background: color-mix(in srgb, var(--h-pink) 45%, transparent);
+  animation: fx-strike 3.6s ease-in-out infinite; animation-delay: var(--d); }
+@keyframes fx-box { 0%, 15% { background: transparent; } 30%, 80% { background: var(--h-pink); } 100% { background: transparent; } }
+@keyframes fx-tick { 0%, 15% { opacity: 0; transform: scale(0.4); } 30%, 80% { opacity: 1; transform: scale(1); } 100% { opacity: 0; } }
+@keyframes fx-strike { 0%, 15% { opacity: 1; } 30%, 80% { opacity: 0.3; } 100% { opacity: 1; } }
+
+/* Personal Journal */
+.fx-journal { display: flex; flex-direction: column; gap: 14%; width: 100%; }
+.fx-journal i { display: block; height: 7px; border-radius: 4px; background: var(--h-pink); opacity: 0.85;
+  animation: fx-write 3.4s ease-in-out infinite; animation-delay: var(--d); }
+@keyframes fx-write { 0% { width: var(--w); } 6% { width: 0; } 45%, 100% { width: var(--w); } }
+
+/* Goal Planner */
+.fx-goal { display: flex; flex-direction: column; gap: 16%; width: 100%; }
+.fx-goal .track { height: 14px; border-radius: 999px; overflow: hidden; background: color-mix(in srgb, var(--h-pink) 22%, transparent); }
+.fx-goal .fill { height: 100%; width: 70%; border-radius: 999px; background: linear-gradient(90deg, var(--h-pink), #ff9ec0);
+  animation: fx-fill 3s ease-in-out infinite; }
+.fx-goal .flag { align-self: flex-end; animation: fx-bob 1.4s ease-in-out infinite; }
+@keyframes fx-fill { 0% { width: 70%; } 10% { width: 4%; } 85%, 100% { width: 100%; } }
+@keyframes fx-bob { 50% { transform: translateY(-6px) rotate(8deg); } }
+
+/* Personal Calendar */
+.fx-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6%; width: 100%; }
+.fx-cal i { aspect-ratio: 1; border-radius: 5px; background: color-mix(in srgb, var(--h-pink) 18%, transparent);
+  animation: fx-cell 3.4s ease-in-out infinite; animation-delay: calc(var(--i) * 0.1s); }
+@keyframes fx-cell {
+  0%, 100% { background: color-mix(in srgb, var(--h-pink) 18%, transparent); transform: scale(1); }
+  8%, 14% { background: var(--h-pink); transform: scale(1.18); }
+  24% { background: color-mix(in srgb, var(--h-pink) 18%, transparent); transform: scale(1); }
+}
+
+/* Shared Dashboard */
+.fx-share { display: flex; align-items: center; justify-content: center; width: 100%; }
+.fx-share .av { width: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--h-btn);
+  border: 2px solid var(--h-pink); box-shadow: 0 0 18px var(--h-glow); }
+.fx-share .together-link { width: 24%; }
+
+/* Shared Location */
+.fx-loc { position: relative; width: 100%; height: 100%; }
+.fx-loc svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fx-loc .loc-pulse { position: absolute; margin: -20px 0 0 -20px; }
+.fx-loc line { stroke: var(--h-pink); stroke-width: 2; stroke-dasharray: 6 8; vector-effect: non-scaling-stroke;
+  animation: fx-march 1.2s linear infinite; }
+@keyframes fx-march { to { stroke-dashoffset: -28; } }
+
+/* Spotify (via Last.fm) */
+.fx-music { display: flex; align-items: center; justify-content: center; gap: 10%; width: 100%; height: 100%; }
+.fx-music .disc { width: 42%; aspect-ratio: 1; border-radius: 50%; animation: fx-spin 4s linear infinite;
+  background: radial-gradient(circle, var(--h-bg) 14%, #222 15%, #222 40%, var(--h-pink) 41%, var(--h-pink) 46%, #222 47%); }
+.fx-music .bars { display: flex; align-items: flex-end; gap: 6%; height: 55%; flex: 1; }
+.fx-music .bars i { flex: 1; height: var(--h); border-radius: 3px; background: var(--h-pink); transform-origin: bottom;
+  animation: fx-grow 1s ease-in-out infinite alternate; animation-delay: calc(var(--i) * 0.15s); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx.fx-on *, .fx.fx-on *::before, .fx.fx-on *::after { animation-play-state: paused !important; }
+}

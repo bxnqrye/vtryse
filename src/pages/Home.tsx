@@ -2,25 +2,29 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Lenis from 'lenis'
 import { supabase } from '../supabaseClient'
+import FeatureVisual from '../components/FeatureVisual'
+import type { FeatureKind } from '../components/FeatureVisual'
+import '../features.css'
 import type { ReactNode } from 'react'
 
-const FEATURES = [
-  { name: 'Dashboard' },
-  { name: 'Journal' },
-  { name: 'Calendar' },
-  { name: 'Task Tracker' },
-  { name: 'Goal Planner' },
-  { name: 'Shared Dashboard' },
-  { name: 'Spotify Activity' },
+const FEATURES: { name: string; desc: string; kind: FeatureKind }[] = [
+  { name: 'Personal Dashboard', kind: 'dashboard', desc: 'View your activities, progress, and overall statistics in one place.' },
+  { name: 'Task Tracker', kind: 'tasks', desc: 'Manage ongoing, completed, and cancelled tasks.' },
+  { name: 'Personal Journal', kind: 'journal', desc: 'Record thoughts, experiences, and daily reflections.' },
+  { name: 'Goal Planner', kind: 'goals', desc: 'Set future goals, track milestones, and see the days remaining until important events.' },
+  { name: 'Personal Calendar', kind: 'calendar', desc: 'Organize activities, deadlines, and upcoming events.' },
+  { name: 'Shared Dashboard', kind: 'shared', desc: 'Connect with others through invite codes, view their progress and activities, and leave comments.' },
+  { name: 'Shared Location', kind: 'location', desc: 'Share real-time location with other users.' },
+  { name: 'Spotify Integration', kind: 'music', desc: 'Display your currently playing or recently played Spotify tracks through Last.fm.' },
 ]
 
 const LEGAL_LINKS = [
   { label: 'Terms & Conditions', href: '#' },
   { label: 'Privacy', href: '#' },
-  { label: 'Policy Help', href: '#' },
-  { label: 'Contact', href: 'mailto:you@example.com' },
+  { label: 'Contact Support', href: 'mailto:you@example.com' },
 ]
 const SOCIALS = [{ url: 'https://github.com/bxnqrye', label: 'GitHub' }]
+const YEAR = new Date().getFullYear()
 
 function iconFor(url: string) {
   let host: string
@@ -107,6 +111,64 @@ function Wave({ text, start = 0 }: { text: string; start?: number }) {
   )
 }
 
+// "Don't miss out." -> fades -> "Keep in touch." -> fades -> "Use VTRyse." (stays)
+function Showcase() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [started, setStarted] = useState(false)
+  const [idx, setIdx] = useState(0)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.5 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!started) return
+    const timers: ReturnType<typeof setTimeout>[] = []
+    const show = (i: number) => {
+      setIdx(i)
+      setVisible(true)
+      if (i < 2) {
+        timers.push(setTimeout(() => setVisible(false), 2200)) // hold, then fade out
+        timers.push(setTimeout(() => show(i + 1), 3000)) // next phrase
+      }
+    }
+    timers.push(setTimeout(() => show(0), 100))
+    return () => timers.forEach(clearTimeout)
+  }, [started])
+
+  return (
+    <div ref={ref} className="flex min-h-[55vh] items-center justify-center px-[6vw] text-center">
+      <p
+        className={`text-[clamp(2.2rem,8vw,5rem)] font-bold leading-tight transition-all duration-700 ease-out ${
+          visible ? 'opacity-100 blur-0 scale-100' : 'opacity-0 blur-md scale-95'
+        }`}
+      >
+        {idx === 0 && <>Don't miss out.</>}
+        {idx === 1 && <>Keep in touch.</>}
+        {idx === 2 && (
+          <>
+            Use{' '}
+            <span className="text-(--h-pink) [text-shadow:0_0_36px_var(--h-glow)]">VTRyse</span>.
+          </>
+        )}
+      </p>
+    </div>
+  )
+}
+
 function Home() {
   const rootRef = useRef<HTMLDivElement>(null)
   const [filled, setFilled] = useState(1)
@@ -161,12 +223,50 @@ function Home() {
     }
   }, [])
 
+  const card = (f: (typeof FEATURES)[number], i: number) => {
+    const on = active === f.name
+    return (
+      <Reveal
+        key={f.name}
+        delay={(i % 5) * 80}
+        className="relative hover:z-10 focus-within:z-10 w-[calc((100%-var(--fg))/2-1px)] sm:w-[calc((100%-2*var(--fg))/3-1px)] lg:w-[calc((100%-4*var(--fg))/5-1px)]"
+      >
+        <button
+          onMouseEnter={() => setActive(f.name)}
+          onMouseLeave={() => setActive(null)}
+          onFocus={() => setActive(f.name)}
+          onBlur={() => setActive(null)}
+          onClick={() => setActive(on ? null : f.name)}
+          className="flex flex-col items-center gap-[clamp(0.5rem,1.2vw,0.9rem)] w-full focus:outline-none"
+        >
+          <div
+            className={`relative aspect-square w-full overflow-hidden rounded-[clamp(1rem,2.4vw,1.75rem)] border bg-(--h-card) transition-all duration-300 ${
+              on
+                ? 'scale-105 border-(--h-pink) shadow-[0_0_50px_var(--h-glow)]'
+                : 'border-(--h-card-border)'
+            }`}
+          >
+            <FeatureVisual kind={f.kind} on={on} />
+          </div>
+          <span
+            className={`text-[clamp(1rem,1.7vw,1.4rem)] font-bold leading-tight transition-all duration-300 ${
+              on ? 'text-(--h-pink) [text-shadow:0_0_14px_var(--h-glow)]' : ''
+            }`}
+          >
+            {f.name}
+          </span>
+          <span className="text-[clamp(0.8rem,1.15vw,1rem)] leading-snug opacity-65 px-1">{f.desc}</span>
+        </button>
+      </Reveal>
+    )
+  }
+
   return (
     <div
       ref={rootRef}
       className="home-page font-hand relative min-h-dvh overflow-x-clip bg-(--h-bg) text-(--h-text)"
     >
-      {/* Pink glows: bottom follows the scroll, top sways */}
+      {/* Pink glow that follows the scroll */}
       <div className="home-glow fixed inset-0 pointer-events-none z-0" />
 
       {/* Top-left: light / dark toggle */}
@@ -227,63 +327,41 @@ function Home() {
             alt="vtryse logo"
             className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
-          <h1 className="font-titan relative tracking-tight text-[55px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
+          <h1 className="font-titan relative font-display tracking-tight text-[70px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
             VTRryse
           </h1>
-          <p className="font-fuzzy relative mt-4 opacity-70 text-lg leading-snug max-w-[90vw]">
+          <p className="font-fuzzy relative mt-7 opacity-70 text-lg leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
             <Wave text="See how far you've come." start={38} />
           </p>
         </section>
 
-        {/* 2. Features */}
-        <section className="font-gaeru flex flex-col items-center px-[6vw] py-[clamp(3rem,10vw,6rem)]">
+        {/* 2. Features: 5 on top, 3 below */}
+        <section className="flex flex-col items-center px-[4vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
             <h2 className="text-(--h-pink) text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
               <Wave text="‿︵‿୨ FEATURES ୧‿︵‿ " />
             </h2>
           </Reveal>
-          <div className="full max-w-6xl flex flex-wrap justify-center [--fg:clamp(1rem,2.5vw,2rem)] gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
-            {FEATURES.map((f, i) => {
-              const on = active === f.name
-              return (
-                <Reveal
-                  key={f.name}
-                  delay={(i % 5) * 80}
-                  className="relative hover:z-10 focus-within:z-10 w-[calc((100%-var(--fg))/2-1px)] sm:w-[calc((100%-2*var(--fg))/3-1px)] lg:w-[calc((100%-4*var(--fg))/5-1px)]"
-                >
-                  <button
-                    onMouseEnter={() => setActive(f.name)}
-                    onMouseLeave={() => setActive(null)}
-                    onFocus={() => setActive(f.name)}
-                    onBlur={() => setActive(null)}
-                    onClick={() => setActive(on ? null : f.name)}
-                    className="flex flex-col items-center gap-[clamp(0.5rem,1.5vw,1rem)] w-full focus:outline-none"
-                  >
-                    <div
-                      className={`aspect-square w-full rounded-[clamp(1rem,3vw,1.5rem)] border bg-(--h-card) transition-all duration-300 ${
-                        on
-                          ? 'scale-105 sm:scale-110 border-(--h-pink) shadow-[0_0_45px_var(--h-glow)]'
-                          : 'border-(--h-card-border)'
-                      }`}
-                    />
-                    <span
-                      className={`text-[clamp(1rem,2vw,1.5rem)] font-bold leading-tight transition-all duration-300 ${
-                        on ? 'scale-105 sm:scale-110 text-(--h-pink) [text-shadow:0_0_14px_var(--h-glow)]' : ''
-                      }`}
-                    >
-                      {f.name}
-                    </span>
-                  </button>
-                </Reveal>
-              )
-            })}
+          <div className="w-full max-w-[88rem] flex flex-col gap-y-[clamp(1.5rem,3vw,2.5rem)] [--fg:clamp(1rem,2vw,1.75rem)]">
+            <div className="flex flex-wrap justify-center gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
+              {FEATURES.slice(0, 5).map((f, i) => card(f, i))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-x-(--fg) gap-y-[clamp(1.5rem,3vw,2.5rem)]">
+              {FEATURES.slice(5).map((f, i) => card(f, i))}
+            </div>
           </div>
         </section>
 
-        {/* 3. Footer */}
-        <section className="font-gaeru flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
+        {/* 3. Showcase */}
+        <Showcase />
+
+        {/* 4. Footer */}
+        <section className="flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
           <Reveal className="flex flex-col items-center">
+            <p className="mb-3 text-[clamp(0.85rem,1.8vw,1.05rem)] tracking-wide opacity-70">
+              © {YEAR} VTRyse. All rights reserved.
+            </p>
             <nav className="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2 text-[clamp(0.95rem,2.2vw,1.25rem)] tracking-wide sm:tracking-widest">
               {LEGAL_LINKS.map((l, i) => (
                 <span key={l.label} className="flex items-center gap-3 sm:gap-5">

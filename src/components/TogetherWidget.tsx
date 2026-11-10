@@ -39,7 +39,7 @@ function Avatar({ m }: { m: Member }) {
   )
 }
 
-function TogetherWidget() {
+function TogetherWidget({ distanceText }: { distanceText?: string | null }) {
   const [meId, setMeId] = useState<string | null>(null)
   const [members, setMembers] = useState<Member[]>([])
   const [counters, setCounters] = useState<Counter[]>([])
@@ -221,6 +221,12 @@ function TogetherWidget() {
             </div>
           ))}
         </div>
+      )}
+
+      {distanceText && (
+        <p className="relative z-10 -mt-1 mb-2 text-sm font-bold text-(--h-pink) [text-shadow:0_0_14px_var(--h-glow)]">
+          {distanceText}
+        </p>
       )}
 
       <div className="space-y-4 max-h-64 soft-scroll pr-1">

@@ -408,3 +408,21 @@ html:has(.app-shell) { font-size: 17px; }
 .soft-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(190, 125, 140, 0.8);
 }
+
+.leaflet-container { font-family: inherit; }
+.loc-pulse { position: relative; width: 40px; height: 40px; }
+.loc-dot { position: absolute; inset: 13px; border-radius: 50%; background: #e58a9b; border: 2px solid #fff;
+  box-shadow: 0 0 12px 3px rgba(232,137,154,.9); animation: loc-flicker 1.6s ease-in-out infinite; }
+.loc-ring { position: absolute; inset: 0; border-radius: 50%; background: rgba(232,137,154,.45);
+  animation: loc-ping 2.2s ease-out infinite; }
+.loc-ring2 { animation-delay: 1.1s; }
+.loc-me .loc-dot { background: #ff5f8f; }
+@keyframes loc-ping { 0% { transform: scale(.35); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes loc-flicker { 0%,100% { opacity: 1; } 50% { opacity: .7; } }
+.loc-tip { background: rgba(31,26,26,.85); color: #fff; border: 1px solid rgba(232,137,154,.5); border-radius: 8px; }
+.loc-tip::before { display: none; }
+.glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 0 18px rgba(232,137,154,.55); }
+  50% { box-shadow: 0 0 38px rgba(232,137,154,.95); }
+}
