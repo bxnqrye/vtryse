@@ -152,7 +152,7 @@ function Showcase() {
   return (
     <div ref={ref} className="flex min-h-[55vh] items-center justify-center px-[6vw] text-center">
       <p
-        className={`text-[clamp(2.2rem,8vw,5rem)] font-bold leading-tight transition-all duration-700 ease-out ${
+        className={`text-[clamp(2.2rem,8vw,5rem)] font-bold leading-tight transition-all duration-400 ease-out ${
           visible ? 'opacity-100 blur-0 scale-100' : 'opacity-0 blur-md scale-95'
         }`}
       >
@@ -161,7 +161,7 @@ function Showcase() {
         {idx === 2 && (
           <>
             Use{' '}
-            <span className="text-(--h-pink) [text-shadow:0_0_36px_var(--h-glow)]">VTRyse</span>.
+            <span className="text-(--h-pink) [text-shadow:0_0_36px_var(--h-glow)]">VTRyze</span>
           </>
         )}
       </p>
@@ -327,10 +327,10 @@ function Home() {
             alt="vtryse logo"
             className="logo-spin relative w-[clamp(7rem,24vw,12.5rem)] h-auto"
           />
-          <h1 className="font-titan relative font-display tracking-tight text-[70px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
-            VTRryse
+          <h1 className="font-gaegu relative font-display tracking-tight text-[70px] leading-none text-(--h-pink) [text-shadow:0_0_30px_var(--h-glow)]">
+            VTRryze
           </h1>
-          <p className="font-fuzzy relative mt-7 opacity-70 text-lg leading-snug max-w-[90vw]">
+          <p className="font-fuzzy relative mt-5 opacity-70 text-lg leading-snug max-w-[90vw]">
             <Wave text="Track your progress. Document your journey." />
             <Wave text="See how far you've come." start={38} />
           </p>
@@ -340,7 +340,7 @@ function Home() {
         <section className="flex flex-col items-center px-[4vw] py-[clamp(3rem,10vw,6rem)]">
           <Reveal>
             <h2 className="text-(--h-pink) text-[clamp(1.5rem,4vw,2rem)] font-bold tracking-wider mb-[clamp(1.5rem,4vw,2.5rem)]">
-              <Wave text="‿︵‿୨ FEATURES ୧‿︵‿ " />
+              <Wave text="FEATURES" />
             </h2>
           </Reveal>
           <div className="w-full max-w-[88rem] flex flex-col gap-y-[clamp(1.5rem,3vw,2.5rem)] [--fg:clamp(1rem,2vw,1.75rem)]">
@@ -360,7 +360,7 @@ function Home() {
         <section className="flex flex-col items-center px-[5vw] pt-[clamp(3rem,8vw,5rem)] pb-[clamp(1.5rem,4vw,2.5rem)] text-center">
           <Reveal className="flex flex-col items-center">
             <p className="mb-3 text-[clamp(0.85rem,1.8vw,1.05rem)] tracking-wide opacity-70">
-              © {YEAR} VTRyse. All rights reserved.
+              © {YEAR} VTRyze. All rights reserved.
             </p>
             <nav className="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2 text-[clamp(0.95rem,2.2vw,1.25rem)] tracking-wide sm:tracking-widest">
               {LEGAL_LINKS.map((l, i) => (

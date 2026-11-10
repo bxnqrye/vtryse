@@ -71,9 +71,9 @@ function Login() {
       <div className="relative w-full max-w-sm p-8 bg-(--h-card) backdrop-blur-xl border border-(--h-card-border) rounded-3xl shadow-[0_0_60px_var(--h-glow)]">
         <Link
           to="/"
-          className="font-titan block text-center font-display text-3xl text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
+          className="font-gaegu block text-center font-display text-3xl text-(--h-pink) [text-shadow:0_0_24px_var(--h-glow)]"
         >
-          VTRyse
+          VTRyze
         </Link>
 
         <h2 className="text-[20px] font-bold mb-4 text-center">
