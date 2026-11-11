@@ -96,7 +96,7 @@ function Dashboard() {
 
       {/* Spotify + Together + Notes */}
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-4 items-start mb-4">
-        <section className="glass p-5 w-full min-w-0 self-start">
+        <section className="glass p-5 w-full min-w-0 self-start h-[406px] flex flex-col overflow-hidden">
           <SpotifySection />
         </section>
 

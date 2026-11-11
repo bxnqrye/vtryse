@@ -115,8 +115,8 @@ function SpotifySection() {
     : (activity?.recent[0] ?? null)
 
   return (
-    <div className="w-full min-w-0">
-      <div className="flex items-center justify-between mb-1">
+    <div className="w-full min-w-0 h-full min-h-0 flex flex-col">
+      <div className="flex items-center justify-between mb-1 shrink-0">
         <h2 className="ml-4 g-label text-sm">
           Spotify{activity?.source === 'lastfm' ? ' · via Last.fm' : ''}
         </h2>
@@ -179,7 +179,7 @@ function SpotifySection() {
       )}
 
       {activity?.connected && !activity.error && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start flex-1 min-h-0 overflow-y-auto soft-scroll pr-1">
           {/* Listening Now + Recent Tracks */}
           <div className="w-full min-w-0">
             {current ? (
