@@ -426,3 +426,7 @@ html:has(.app-shell) { font-size: 17px; }
   0%,100% { box-shadow: 0 0 18px rgba(232,137,154,.55); }
   50% { box-shadow: 0 0 38px rgba(232,137,154,.95); }
 }
+
+.map-dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.88) contrast(0.9) saturate(0.7);
+}

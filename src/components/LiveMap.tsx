@@ -49,22 +49,18 @@ function LiveMap({ points, dark, active }: Props) {
     }
   }, [])
 
-  // Light / dark tiles
+  // OpenStreetMap tiles: free, no API key. Dark mode is done with a CSS filter (.map-dark in index.css).
   useEffect(() => {
     const m = map.current
     if (!m) return
-    const url = dark
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-    const tiles = L.tileLayer(url, {
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      subdomains: 'abcd',
-      attribution: '© OpenStreetMap contributors © CARTO',
+      attribution: '© OpenStreetMap contributors',
     }).addTo(m)
     return () => {
       tiles.remove()
     }
-  }, [dark])
+  }, [])
 
   // Re-measure when the panel finishes sliding in
   useEffect(() => {
@@ -130,7 +126,7 @@ function LiveMap({ points, dark, active }: Props) {
     }
   }, [points])
 
-  return <div ref={el} className="h-full w-full" />
+  return <div ref={el} className={`h-full w-full ${dark ? 'map-dark' : ''}`} />
 }
 
 export default LiveMap
