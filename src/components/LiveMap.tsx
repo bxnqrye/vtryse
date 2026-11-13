@@ -14,6 +14,7 @@ interface Props {
   points: MapPoint[]
   dark: boolean
   active: boolean
+  interactive?: boolean
 }
 
 function makeIcon(me: boolean) {
@@ -25,7 +26,7 @@ function makeIcon(me: boolean) {
   })
 }
 
-function LiveMap({ points, dark, active }: Props) {
+function LiveMap({ points, dark, active, interactive = true }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const map = useRef<L.Map | null>(null)
   const group = useRef<L.LayerGroup | null>(null)
@@ -35,8 +36,17 @@ function LiveMap({ points, dark, active }: Props) {
   // Create the map once
   useEffect(() => {
     if (!el.current) return
-    const m = L.map(el.current, { zoomControl: false }).setView([14.6, 121], 4)
-    L.control.zoom({ position: 'bottomleft' }).addTo(m)
+    const m = L.map(el.current, {
+      zoomControl: false,
+      // one-finger drag is off on phones so the panel can still be scrolled past the map
+      dragging: interactive && !L.Browser.mobile,
+      scrollWheelZoom: interactive,
+      touchZoom: interactive,
+      doubleClickZoom: interactive,
+      boxZoom: false,
+      keyboard: false,
+    }).setView([14.6, 121], 4)
+    if (interactive) L.control.zoom({ position: 'bottomleft' }).addTo(m)
     group.current = L.layerGroup().addTo(m)
     map.current = m
     const store = markers.current
@@ -47,7 +57,7 @@ function LiveMap({ points, dark, active }: Props) {
       store.clear()
       fitted.current = ''
     }
-  }, [])
+  }, [interactive])
 
   // OpenStreetMap tiles: free, no API key. Dark mode is done with a CSS filter (.map-dark in index.css).
   useEffect(() => {
